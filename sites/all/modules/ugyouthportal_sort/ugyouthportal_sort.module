@@ -1,0 +1,172 @@
+<?php
+
+$ugyouthportal_sort_finished_run = false;
+
+/**
+ * implements hook_menu()
+ */
+function ugyouthportal_sort_menu() {
+	$items = array();
+	/*
+	$items['admin/content/random-sort-content'] = array (
+		'title' => 'Run Random Content Sort',
+		'description' => 'Run random sorter for uPortal content',
+		'page callback' => 'ugyouthportal_sort_callback_sort_content',
+		'access arguments' => array('administer nodes'),
+		'type' => MENU_NORMAL_ITEM,
+	);
+	*/
+	return $items;
+}
+
+/**
+ * callback for sort content menu item
+ */
+function ugyouthportal_sort_callback_sort_content() {
+	ugyouthportal_sort_run_random_content_sorter();
+	return 'Random Sort complete.';
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function ugyouthportal_sort_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'ugyouthportal_sort') . '/views',
+  );
+}
+
+/**
+ * Implements hook_cron()
+ */
+function ugyouthportal_sort_cron() {
+	//ugyouthportal_sort_run_random_content_sorter();
+}
+
+/**
+ * run random content sorter to database
+ */
+function ugyouthportal_sort_run_random_content_sorter($nids_to_sort) {
+	
+	global $ugyouthportal_sort_finished_run;
+	if ($ugyouthportal_sort_finished_run) return;
+	
+	//container for all nids arranged by series in topics
+	$nids_by_topic_series = array();
+	//$unsorted_nids = array();
+	$nids_total_count = 0;
+	$topics_total_count = 0;
+	
+	//get all nids along with their topics and series
+	$sql_query = "
+		SELECT
+			node.nid AS content_nid,
+			node_field_data_field_topic_reference.nid AS topic_nid,
+			node_field_data_field_series_reference.nid AS series_nid
+		FROM 
+			{node} node
+			LEFT JOIN {field_data_field_topic_reference} field_data_field_topic_reference ON node.nid = field_data_field_topic_reference.entity_id AND (field_data_field_topic_reference.entity_type = 'node' AND field_data_field_topic_reference.deleted = '0')
+			LEFT JOIN {node} node_field_data_field_topic_reference ON field_data_field_topic_reference.field_topic_reference_target_id = node_field_data_field_topic_reference.nid
+			LEFT JOIN {field_data_field_series_reference} field_data_field_series_reference ON node.nid = field_data_field_series_reference.entity_id AND (field_data_field_series_reference.entity_type = 'node' AND field_data_field_series_reference.deleted = '0')
+			LEFT JOIN {node} node_field_data_field_series_reference ON field_data_field_series_reference.field_series_reference_target_id = node_field_data_field_series_reference.nid
+		WHERE ( node.type IN  ('audio', 'document', 'video') AND node.nid IN (".implode(',',$nids_to_sort).") )
+	";
+	$nid_results = db_query($sql_query);
+	foreach ($nid_results as $nid_result) {
+		$content_nid = $nid_result->content_nid;
+		$parent_topic_nid = $nid_result->topic_nid;
+		$parent_series_nid = $nid_result->series_nid;
+		$nids_by_topic_series['topic-'.$parent_topic_nid]['series-'.$parent_series_nid][] = $content_nid;
+		//$unsorted_nids[] = 'Topic '.$parent_topic_nid.' Series '.$parent_series_nid.' NID '.$content_nid;
+		$nids_total_count++;
+	}
+	
+	//shuffle arrays
+	shuffle($nids_by_topic_series);//shuffle topics
+	foreach ($nids_by_topic_series as &$series_in_topic) { //shuffle series and content in the topics
+		shuffle($series_in_topic);
+		foreach ($series_in_topic as &$content_in_series) {
+			shuffle($content_in_series);
+		}
+	}
+	
+	//implement random-ish sort
+	$sorted_nids = array();
+	$active_topic_index = 0;
+	$topics_total_count = count($nids_by_topic_series);
+	
+	//track current series index for each topic
+	$track_series_index_by_topic = array(); //'topic-3' => 0
+	for ($i=0; $i<$topics_total_count; $i++) {
+		$track_series_index_by_topic['topic-'.$i] = 0;
+	}
+	
+	//iterate through all nids
+	for ($i=0; $i<$nids_total_count; $i++) {
+		if ($active_topic_index!==FALSE && $active_topic_index>=0 && $active_topic_index<$topics_total_count) {
+			$topic = &$nids_by_topic_series[$active_topic_index];
+			$active_series_index = $track_series_index_by_topic['topic-'.$active_topic_index];
+			$series = &$topic[$active_series_index];
+	
+			$nid = array_pop($series);
+			$sorted_nids[] = $nid;
+			
+			//refresh series index
+			$no_series_in_topic = count($topic);
+			if (count($series)<=0) { //if current series has been emptied
+				//remove this series from the topic because it is empty
+				array_splice($topic, $active_series_index, 1);
+				$no_series_in_topic--;
+				if ($active_series_index == $no_series_in_topic) { //reset series index if removed item was the last one
+					$active_series_index = 0;
+				}
+			} else {
+				if (isset($topic[$active_series_index+1])) {
+					$active_series_index++;
+				} elseif ($active_series_index == $no_series_in_topic-1) {
+					$active_series_index = 0;
+				}
+			}
+			$track_series_index_by_topic['topic-'.$active_topic_index] = $active_series_index;
+			
+			//refresh topic index
+			$active_topic_index = ugyouthportal_sort_helper_get_next_topic_index($active_topic_index, $topics_total_count, $nids_by_topic_series);
+
+		}
+	}
+	
+	return $sorted_nids;
+	
+	$ugyouthportal_sort_finished_run = true;
+	
+}
+
+
+function ugyouthportal_sort_helper_get_next_topic_index($active_topic_index, $topics_total_count, $nids_by_topic_series) {
+	
+	$look_for_valid_index_starting_from = $active_topic_index + 1;
+	$found_valid_index = false;
+	$new_index = FALSE;
+	
+	if ($look_for_valid_index_starting_from == $topics_total_count) {
+		$look_for_valid_index_starting_from = 0;
+	}
+	
+	$cnter = 0;
+	$j = $look_for_valid_index_starting_from;
+	while(!$found_valid_index) {
+		if (isset($nids_by_topic_series[$j]) && count($nids_by_topic_series[$j])>0) {
+			$new_index = $j;
+			$found_valid_index = true;
+		}
+		$j = ($j==$topics_total_count-1) ? 0 : ($j+1);
+		$cnter++;
+		if ($cnter==$topics_total_count*2) { //failed to find valid topic index
+			return FALSE;
+		}
+	}
+	
+	return $new_index;
+}
+

@@ -1,0 +1,280 @@
+<?php
+
+/**
+ * ensure management theme for management/* URLs
+ */
+function uportal_new_theme_custom_theme() {
+	if (isset($_GET['new-theme'])) {
+    return 'uportal_frontend_theme';
+  }
+}
+/** ENDS *****************************************/
+
+
+/**
+ * Implements hook_page_build()
+ */
+function uportal_new_theme_page_build(&$page) {
+	
+	if (!isset($_GET['new-theme'])) {
+		return;
+	}
+	
+	$page_blocks = array (
+		'mega_menu' => array (
+			array('module'=>'ugyouthportal', 'delta'=>'index_search_form'),
+		),
+		'main_nav' => array (
+			array('module'=>'views', 'delta'=>'categories-block_4'),
+		),
+	);
+	
+	if (drupal_is_front_page()) {
+		$page_blocks['after_cols'] = array (
+			array('module'=>'views', 'delta'=>'categories-block_1'),
+		);
+	}
+	
+	foreach ($page_blocks as $region => $region_blocks_info) {
+		$region_blocks = array();
+		foreach ($region_blocks_info as $block_info) {
+			$region_blocks[] = block_load($block_info['module'], $block_info['delta']);
+		}
+		$page[$region] = _block_get_renderable_array(_block_render_blocks($region_blocks));
+	}
+	
+}
+/** ENDS *****************************************/
+
+
+/**
+ * get meta info for video node
+ */
+function _uportal_new_theme_get_content_meta_info_video($node_content, $node) {
+	//series info
+	$series_info = _uportal_new_theme_get_node_series_content_video($node);
+	
+	//comments
+	$comment_info = array (
+		'comments_html' => render($node_content['comments']),
+		'comment_count' => $node->comment_count,
+	);
+	
+	//node series or category title
+	$node_series_category_title = $node->field_topic_reference['und'][0]['entity']->title;
+	if (isset($node->field_series_reference) && isset($node->field_series_reference['und']) && count($node->field_series_reference['und'])>0) {
+		$node_series_category_title = $node->field_series_reference['und'][0]['entity']->title;
+	}
+	
+	return array (
+		'comment-info' => $comment_info,
+		'series-info' => $series_info,
+		'node-series-category-title' => $node_series_category_title,
+	);
+}
+/** ENDS *****************************************/
+
+
+/**
+ * return series content
+ */
+function _uportal_new_theme_get_node_series_content_video($node) {
+	
+	$language_index = isset($node->language) ? $node->language : 'und';
+	$topic_language_index = 'und';
+	$series_language_index = 'und';
+	$related_series_title = '';
+	
+	$in_series = (count($node->field_series_reference) && isset($node->field_series_reference[$series_language_index]) && count($node->field_series_reference[$series_language_index]));
+	$topic_nid = $node->field_topic_reference[$topic_language_index][0]['target_id'];
+	$topic_title = $node->field_topic_reference[$topic_language_index][0]['entity']->title;
+	$series_name = '';
+	
+	if (isset($_GET['from']) && $_GET['from']=='lesson-plan' && isset($_GET['from-nid']) && is_numeric($_GET['from-nid'])) {
+		$lesson_plan_nid = $_GET['from-nid'];
+		$series_content = views_get_view_result('series', 'block_2', $lesson_plan_nid);
+		$series_content = _ugyouthportal_clean_up_repeated_results_from_series($series_content);
+		$playlist_no = count($series_content);
+		
+		//get lesson plan title
+		$lesson_plan_title = '';
+		$related_lesson_plans = $node->field_lesson_plan_reference[$series_language_index];
+		foreach ($related_lesson_plans as $related_lesson_plan) {
+			if ($related_lesson_plan['target_id']==$lesson_plan_nid) {
+				$lesson_plan_title = $related_lesson_plan['entity']->title;
+				break;
+			}
+		}
+		
+		//$series_title = 'Lesson Plan: '.$lesson_plan_title.' ('.$playlist_no.' items)';
+		$series_title = 'In Lesson Plan: <strong>'.$lesson_plan_title.'</strong>';
+		$series_content_str = '<ul class="clearfix lesson-plan-playlist home-page-listing-ul">';
+	} elseif ($in_series) { //has a playlist
+		$series_nid = $node->field_series_reference[$series_language_index][0]['target_id'];
+		$series_content = views_get_view_result('series', 'block_0', $series_nid);
+		$series_content = _ugyouthportal_clean_up_repeated_results_from_series($series_content);
+		$playlist_no = count($series_content);
+		$series_name = $node->field_series_reference[$series_language_index][0]['entity']->title;
+		//$series_title = 'Series: '.$series_name.' ('.$playlist_no.' items)';
+		$series_title = 'In Series: <strong>'.$series_name.'</strong>';
+		$series_content_str = '<ul class="clearfix home-page-listing-ul series-playlist">';
+	} else {
+		$series_content = views_get_view_result('series', 'block_1', $topic_nid);
+		$series_content = _ugyouthportal_clean_up_repeated_results_from_series($series_content);
+		$playlist_no = count($series_content);
+		//$series_title = t('Related content in ').$topic_link;
+		$series_title = 'Related in: <strong>'.$topic_title.'</strong>';
+		$series_content_str = '<ul class="clearfix home-page-listing-ul related-content-playlist">';
+	}
+	
+	//dsm($node);
+	//dsm($series_content);
+	
+	$no_cols = 4;
+	$playlist_html_small = '<ul class="playlist-small clearfix">';
+	$playlist_html_large = '<ul class="playlist-large clearfix">';
+	
+	//put current node as first item on playlist
+	if ($node->type=='video') {
+		
+		$use_video_img_path = $node->field_image['und'][0]['uri'];
+		if (isset($node->field_image['und'][0]['is_default']) && $node->field_image['und'][0]['is_default'] && isset($node->field_video) && $node->field_video['und'][0]['thumbnailfile']) {
+			$use_video_img_path = $node->field_video['und'][0]['thumbnailfile']->uri;
+		}
+		
+		$playlist_large_img = theme_image_style( array (
+			'style_name' => 'video_player_playlist_big',
+			'path' => $use_video_img_path,
+			'width' => false,
+			'height' => false,
+		));
+		$playlist_small_img = theme_image_style( array (
+			'style_name' => 'video_player_playlist_small',
+			'path' => $use_video_img_path,
+			'width' => false,
+			'height' => false,
+		));
+		
+		//series or category title
+		$series_category_title = $node->field_topic_reference['und'][0]['entity']->title;
+		if (isset($node->field_series_reference) && isset($node->field_series_reference['und'][0])) {
+			$series_category_title = $node->field_series_reference['und'][0]['entity']->title;
+		}
+		
+		//file attributes
+		$item_video_backdrop = image_style_url('content_image_backdrop', $use_video_img_path);
+		$item_video_poster = image_style_url('video_player_poster', $use_video_img_path);
+		$item_title = '<div class="node-series-category-title">'.$series_category_title.'</div><h1>'.$node->title.'</h1>';
+		$item_description = $node->body['und'][0]['safe_value'];
+		$file_path = file_create_url($node->field_video['und'][0]['uri']);
+		$extension_parts = explode('.', $file_path);
+		$extension = $extension_parts[count($extension_parts)-1];
+		$video_info = '<div class="playlist-item-info"><div class="video-backdrop">'.$item_video_backdrop.'</div><div class="video-poster">'.$item_video_poster.'</div><div class="title">'.$item_title.'</div><div class="description">'.$item_description.'</div><div class="extension">'.$extension.'</div><div class="file-path">'.$file_path.'</div></div>';
+		
+		$playlist_html_large .= '<li class="active nid-'.$node->nid.'" data-nid="'.$node->nid.'">'.$playlist_large_img.$video_info.'</li>';
+		$playlist_html_small .= '<li class="active nid-'.$node->nid.'" data-nid="'.$node->nid.'">'.$playlist_small_img.$video_info.'</li>';
+		
+	}
+	
+	for ($i=0; $i<$playlist_no; $i++) {
+		$series_item = $series_content[$i];
+		
+		//category details
+		$category_title = $series_item->node_field_data_field_topic_reference_title;
+		$category_nid = $series_item->node_field_data_field_topic_reference_nid;
+		
+		//css classes
+		$item_class_str = 'content-listing-item node-type-'.$series_item->node_type.' col-'.($i%$no_cols);
+		$item_class_str .= ' category-class-nid-'.$category_nid;
+		//if ($i == 0) $item_class_str .= ' series-item-first';
+		//if ($i == $playlist_no-1) $item_class_str .= ' series-item-last';
+		
+		//series or category title
+		$series_category_title = $category_title;
+		if (isset($series_item->node_field_data_field_series_reference_title) && $series_item->node_field_data_field_series_reference_title) {
+			$series_category_title = $series_item->node_field_data_field_series_reference_title;
+		}
+		
+		//series content item data
+		if ($series_item->node_type=='video') {
+			$use_video_img = $series_item->field_field_image[0]['rendered'];
+			$use_video_img_path = $series_item->field_field_image[0]['raw']['uri'];
+			if (isset($series_item->field_field_image[0]['raw']['is_default']) && $series_item->field_field_image[0]['raw']['is_default'] && isset($series_item->field_field_video) && $series_item->field_field_video[0]['rendered']) {
+				$use_video_img = $series_item->field_field_video[0]['rendered'];
+				$use_video_img_path = $series_item->field_field_video[0]['raw']['thumbnailfile']->uri;
+			}
+			$img = render($use_video_img);
+			
+			if ($_GET['q'] != 'node/'.$series_item->nid) {
+				
+				$playlist_large_img = theme_image_style( array (
+					'style_name' => 'video_player_playlist_big',
+					'path' => $use_video_img_path,
+					'width' => false,
+					'height' => false,
+				));
+				$playlist_small_img = theme_image_style( array (
+					'style_name' => 'video_player_playlist_small',
+					'path' => $use_video_img_path,
+					'width' => false,
+					'height' => false,
+				));
+				
+				//file attributes
+				$item_video_backdrop = image_style_url('content_image_backdrop', $use_video_img_path);
+				$item_video_poster = image_style_url('video_player_poster', $use_video_img_path);
+				$item_title = '<div class="node-series-category-title">'.$series_category_title.'</div><h1>'.$series_item->node_title.'</h1>';
+				$item_description = $series_item->field_body[0]['rendered']['#markup'];
+				$file_path = file_create_url($series_item->field_field_video[0]['raw']['uri']);
+				$extension_parts = explode('.', $file_path);
+				$extension = $extension_parts[count($extension_parts)-1];
+				$video_info = '<div class="playlist-item-info"><div class="video-backdrop">'.$item_video_backdrop.'</div><div class="video-poster">'.$item_video_poster.'</div><div class="title">'.$item_title.'</div><div class="description">'.$item_description.'</div><div class="extension">'.$extension.'</div><div class="file-path">'.$file_path.'</div></div>';
+				
+				$playlist_html_large .= '<li class="nid-'.$series_item->nid.'" data-nid="'.$series_item->nid.'">'.$playlist_large_img.$video_info.'</li>';
+				$playlist_html_small .= '<li class="nid-'.$series_item->nid.'" data-nid="'.$series_item->nid.'">'.$playlist_small_img.$video_info.'</li>';
+				
+			}
+			
+		} else {
+			$img = render($series_item->field_field_image[0]['rendered']);
+		}
+		//$txt = '<span class="title">'.$series_item->node_title.'</span><span class="body">'.render($series_item->field_body[0]['rendered']).'</span>';
+		$txt = '<span class="title">'.$series_item->node_title.'</span>';
+		$size = $series_item->field_field_file_size_duration[0]['rendered']['#markup'];
+		
+		$languages = locale_language_list('name');
+		$language_code = $series_item->node_language=='und' ? 'en' : $series_item->node_language;
+		$language = $languages[$language_code];
+		
+		//build series content item
+		$series_item_str = '<span class="img">';
+		$series_item_str .= '<span class="icon"><span></span></span>';
+		$series_item_str .= $img;
+		$series_item_str .= '<span class="hover-title"><span class="wrapper"><span class="category-title">'.$series_category_title.'</span><span class="series-title">'.$series_item->node_title.'</span></span></span>';
+		$series_item_str .= '</span>';
+		$series_item_str .= '<span class="desc">';
+		$series_item_str .= '<span class="series-category-title">'.$series_category_title.'</span>';
+		$series_item_str .= '<span class="content-title">'.$series_item->node_title.'</span>';
+		$series_item_str .= '<span class="language">'.$language.'</span>';
+		$series_item_str .= '</span>';
+		
+		//link series content item
+		$link_path = drupal_get_path_alias('node/'.$series_item->nid, $language_code);
+		if (isset($_GET['from']) && $_GET['from']=='lesson-plan' && isset($_GET['from-nid']) && is_numeric($_GET['from-nid'])) {
+			$link_path .= '?from=lesson-plan&from-nid='.$_GET['from-nid'];
+		}
+		$series_item_str_linked = '<a href="/'.$link_path.'" title="'.$series_item->node_title.'">'.$series_item_str.'</a>';
+		
+		$series_content_str .= '<li class="'.$item_class_str.'">'.$series_item_str_linked.'</li>';
+	}
+
+	$series_content_str .= '</ul>';
+	
+	return array (
+		'series-list-html' => $series_content_str,
+		'series-title' => $series_title,
+		'small-playlist-html' => $playlist_html_small.'</ul>',
+		'large-playlist-html' => $playlist_html_large.'</ul>',
+	);
+}
+/** END ************************/

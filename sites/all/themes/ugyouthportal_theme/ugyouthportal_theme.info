@@ -1,0 +1,36 @@
+name = UG Youth Portal Theme
+description = UG Youth Portal Theme for the Phase I Prototype
+core = 7.x
+
+stylesheets[screen, projection][] = mediaelement.js/mediaelementplayer.min.css
+stylesheets[screen, projection][] = scripts/chosen/chosen.min.css
+stylesheets[screen, projection][] = css/stylesheets/screen.css
+stylesheets[print][] = css/stylesheets/print.css
+
+; Set the conditional stylesheets that are processed by IE.
+stylesheets-conditional[lt IE 8][screen, projection][] = css/stylesheets/ielt8.css
+stylesheets-conditional[IE 8][screen, projection][] = css/stylesheets/ie8.css
+stylesheets-conditional[IE 9][screen, projection][] = css/stylesheets/ie9.css
+
+scripts[] = scripts/modernizr.min.js
+scripts[] = scripts/jquery.isotope.min.js
+; scripts[] = scripts/jquery.easytabs.min.js
+scripts[] = mediaelement.js/mediaelement-and-player.min.js
+scripts[] = scripts/jplayer/jquery.jplayer.min.js
+scripts[] = scripts/jquery.infinitescroll.min.js
+scripts[] = scripts/jquery.validate.min.js
+scripts[] = scripts/jquery.blockUI.js
+scripts[] = scripts/chosen/chosen.jquery.min.js
+scripts[] = scripts/script.js
+
+regions[header_top_manager_menu] = Header Top Manager Menu
+regions[search_box] = Search Box
+regions[mega_menu] = Mega Menu
+regions[before_content] = Before Content
+regions[in_col_before_content] = In Column Before Content
+regions[content] = Content
+regions[sidebar_first] = Left sidebar
+regions[category_nav] = Category Nav within left sidebar
+regions[sidebar_second] = Right sidebar
+regions[after_cols] = After Content Columns
+regions[footer] = Footer

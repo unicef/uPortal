@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * @file
+ * Handles AdvAgg CSS compress installation and upgrade tasks.
+ */
+
+/**
+ * Implements hook_enable().
+ */
+function advagg_css_compress_enable() {
+  // Flush advagg caches.
+  $cache_tables = advagg_flush_caches();
+  foreach ($cache_tables as $table) {
+    cache_clear_all('*', $table, TRUE);
+  }
+}
+
+/**
+ * Implements hook_disable().
+ */
+function advagg_css_compress_disable() {
+  // Flush advagg caches.
+  $cache_tables = advagg_flush_caches();
+  foreach ($cache_tables as $table) {
+    cache_clear_all('*', $table, TRUE);
+  }
+}
+
+/**
+ * Implements hook_install().
+ */
+function advagg_css_compress_install() {
+  // TODO The drupal_(un)install_schema functions are called automatically in D7.
+  // drupal_install_schema('advagg_css_compress')
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function advagg_css_compress_uninstall() {
+  // Remove variables.
+  variable_del('advagg_css_compress_compressor_level');
+  variable_del('advagg_css_compress_preserve_css');
+  variable_del('advagg_css_compress_inline_cache');
+  variable_del('advagg_css_compress_agg_files');
+  variable_del('advagg_css_compress_inline');
+  variable_del('advagg_css_compressor');
+
+  // Remove our cache table.
+  cache_clear_all('*', 'cache_advagg_css_compress_inline', TRUE);
+  // TODO The drupal_(un)install_schema functions are called automatically in D7.
+  // drupal_uninstall_schema('advagg_css_compress')
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function advagg_css_compress_requirements($phase) {
+  $requirements = array();
+  // Ensure translations don't break at install time
+  $t = get_t();
+
+  if ($phase == 'runtime') {
+  }
+  return $requirements;
+}
+
+/**
+ * Implements hook_schema().
+ */
+function advagg_css_compress_schema() {
+  $schema = array();
+
+  // Create cache tables.
+  $schema['cache_advagg_css_compress_inline'] = drupal_get_schema_unprocessed('system', 'cache');
+  $schema['cache_advagg_css_compress_inline']['description'] = t('Cache table for Advanced CSS/JS Aggregations CSS Compress module. Used to keep inline versions of compressed CSS.');
+
+  return $schema;
+}
+
+/**
+ * Update 6100 - Create the cache_advagg_css_compress_inline cache table.
+ */
+function advagg_css_compress_update_6100() {
+  $ret = array();
+
+  // Create cache table.
+  $schema = advagg_css_compress_schema();
+  db_create_table('cache_advagg_css_compress_inline', $schema['cache_advagg_css_compress_inline']);
+
+  // hook_update_N() no longer returns a $ret array. Instead, return
+  // nothing or a translated string indicating the update ran successfully.
+  // See http://drupal.org/node/224333#update_sql.
+  return t('TODO Add a descriptive string here to show in the UI.') /* $ret */;
+}

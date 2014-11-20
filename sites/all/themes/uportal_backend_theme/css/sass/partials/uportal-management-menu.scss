@@ -1,0 +1,140 @@
+
+@import "partials/my_config";
+
+body.management-menu-active {
+	margin-top: 30px !important;
+}
+
+.header-top-manager-menu {
+	position: fixed;
+	right: 0; left: 0; top: 0;
+	z-index: 999;
+	width: 100%;
+}
+
+#block-uportal-backend-header-manager-menu {
+	height: 30px;
+	line-height: 30px;
+	background: #2c3e50;
+	color: #fff;
+	@include ems_font_size(13px, $body-font-size);
+	a {
+		color: #fff;
+		&:hover {
+			text-decoration: none;
+		}
+	}
+	.dashboard-link {
+		float: left;
+		width: 190px;
+		border-left: solid 1px #999;
+		border-right: solid 1px #999;
+		a {
+			display: block;
+			padding-left: 35px;
+			background: url("../images/header-menu.png") no-repeat 10px 50%;
+		}
+	}
+	.logo {
+		float: left;
+		width: 70px;
+		a {
+			display: block;
+			height: 30px;
+			background: url("../images/logo.png") no-repeat center center;
+		}
+	}
+	#user, .user, .user-menu {
+		float: right;
+	}
+	.user {
+		background: url("../images/user-img.png") no-repeat left center;
+		position: relative;
+		height: 30px;
+		padding: 0 10px 0 25px;
+		color: #fff;
+		ul {
+			position: absolute;
+			right: 0;
+			top: 30px;
+			background: #2c3e50;
+			display: none;
+		}
+		&:hover {
+			ul {
+				display: block;
+			}
+		}
+		a {
+			display: block;
+			white-space: nowrap;
+			padding: 6px 12px;
+			background: #2c3e50;
+			color: #fff;
+			font-size: 12px;
+			@include single-transition(background-color);
+			line-height: 1em;
+			&:hover {
+				background: #395a7c;
+				text-decoration: none;
+			}
+		}
+		li.user-link {
+			a {
+				border-bottom: solid 1px #113152;
+			}
+		}
+	}
+	.quick-links-wrapper {
+		position: relative;
+		float: left;
+		width: 120px;
+		.links-title {
+			padding-left: 35px;
+			background: url("../images/menu.png") no-repeat 10px 50%;
+		}
+		ul.quick-links-menu {
+			position: absolute;
+			display: none;
+			width: 210px;
+			left: 0; top: 30px;
+			background: #2c3e50;
+		}
+		a {
+			display: block;
+			white-space: nowrap;
+			padding: 6px 12px;
+			background: #2c3e50;
+			color: #fff;
+			font-size: 12px;
+			@include single-transition(background-color);
+			border-bottom: solid 1px #999;
+			line-height: 1em;
+			&:hover {
+				background: #395a7c;
+				text-decoration: none;
+			}
+		}
+		&:hover {
+			ul.quick-links-menu {
+				display: block;
+			}
+		}
+	}
+	.try-new-theme {
+		padding-top: 3px;
+		float: left;
+		a {
+			border-radius: 3px;
+			background: #b07f17;
+			font-size: 12px;
+			line-height: 1em;
+			padding: 6px;
+			display: block;
+		}
+	}
+}
+
+#admin-menu {
+	display: none !important;
+}

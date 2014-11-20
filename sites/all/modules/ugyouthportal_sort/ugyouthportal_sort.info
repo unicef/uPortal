@@ -1,0 +1,8 @@
+name = "UG Youth Portal Content Sorting Module"
+description = "A module for sorting content on the portal's listing pages. Ensure a large mysql max_allowed_packet value."
+package = "UG Youth Portal"
+core = "7.x"
+dependencies[] = views
+files[] = ugyouthportal_sort.module
+files[] = ugyouthportal_sort.install
+files[] = views/ugyouthportal_sort.views.inc

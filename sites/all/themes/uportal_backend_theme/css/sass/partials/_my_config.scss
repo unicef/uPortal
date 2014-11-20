@@ -1,0 +1,30 @@
+
+@import "compass/reset";
+@import "compass/css3";
+@import "compass/typography";
+@import "compass/utilities";
+
+$font-unit: 1em;
+$base-font-size: 16px;
+$base-line-height: 24px;
+$body-font-size: 16px;
+$link-dark-blue: #2c3d50;
+$mega-menu-dark-blue: rgba(48, 65, 83, 0.95);
+$mega-menu-light-blue: rgba(77, 96, 116, 0.95);
+$hide-text-direction: left;
+$default-transition-duration : .7s;
+$default-transition-function : ease-out;
+
+//return EMS for PIXELS
+@mixin ems_font_size($to-size, $from-size) {
+	font-size: $font-unit * $to-size / $from-size;
+}
+
+/*
+@include single-transition(color);
+@include transition(
+	color $default-transition-duration $default-transition-function,
+	background-color $default-transition-duration $default-transition-function,
+	border-color $default-transition-duration $default-transition-function
+);
+*/

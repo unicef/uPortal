@@ -1,0 +1,21 @@
+
+.full-page-wrapper {
+	padding-bottom: 150px;
+}
+
+section.page-content {
+	position: relative;
+	z-index: 5;
+	padding-top: 80px;
+}
+
+body.sidebar-first {
+	.page-col-0 {
+		float: left;
+		width: 220px;
+	}
+	.page-col-1 {
+		float: right;
+		width: 700px;
+	}
+}

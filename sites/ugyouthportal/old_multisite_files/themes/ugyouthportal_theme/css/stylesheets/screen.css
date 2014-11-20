@@ -1,0 +1,1348 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 17, C:/Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+/* line 22, C:/Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+html {
+  line-height: 1;
+}
+
+/* line 24, C:/Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+ol, ul {
+  list-style: none;
+}
+
+/* line 26, C:/Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* line 28, C:/Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+/* line 30, C:/Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q, blockquote {
+  quotes: none;
+}
+/* line 103, C:/Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+/* line 32, C:/Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+a img {
+  border: none;
+}
+
+/* line 116, C:/Ruby200-x64/lib/ruby/gems/2.0.0/gems/compass-0.12.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
+
+/* line 2, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_globals.scss */
+body {
+  word-wrap: break-word;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 0;
+  font-size: 1em;
+  line-height: 1.5em;
+  background: #eaebf0;
+  color: #999;
+}
+
+/* line 10, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_globals.scss */
+.element-invisible, body.no-h1 h1, body.views-listing_pages-page_2 h1 {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px);
+  /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+  overflow: hidden;
+  height: 1px;
+}
+
+/* line 17, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_globals.scss */
+h1 {
+  font-weight: bold;
+  color: #666;
+  font-size: 1.5em;
+  line-height: 1em;
+  padding-bottom: 3px;
+  border-bottom: solid 1px #ccc;
+}
+
+/* line 29, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_globals.scss */
+h2 {
+  color: #666;
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 1em;
+}
+
+/* line 35, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_globals.scss */
+.centred-strip {
+  width: 940px;
+  margin: 0 auto;
+}
+
+/* line 39, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_globals.scss */
+a, li a.active, input {
+  color: #999;
+  text-decoration: none;
+}
+/* line 42, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_globals.scss */
+a:hover, li a.active:hover, input:hover {
+  text-decoration: underline;
+}
+/* line 45, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_globals.scss */
+a.btn, li a.active.btn, input.btn {
+  display: block;
+  background: #2c3e50 none;
+  color: #fff;
+  font-size: 0.9375em;
+  text-transform: uppercase;
+  line-height: 40px;
+  text-align: center;
+  height: 40px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+/* line 57, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_globals.scss */
+a.btn:hover, a.btn.active, li a.active.btn:hover, li a.active.btn.active, input.btn:hover, input.btn.active {
+  text-decoration: none;
+  background-color: #3498db;
+  color: #fff;
+}
+/* line 63, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_globals.scss */
+a.btn-icon, li a.active.btn-icon, input.btn-icon {
+  text-align: left;
+  padding-left: 36px;
+  background-position: 10px center;
+  background-repeat: no-repeat;
+}
+
+/* line 2, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_skeleton.scss */
+section.page-content {
+  position: relative;
+  z-index: 5;
+  padding-top: 70px;
+}
+
+/* line 9, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_skeleton.scss */
+body.sidebar-first .page-col-0 {
+  float: left;
+  width: 220px;
+}
+/* line 13, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_skeleton.scss */
+body.sidebar-first .page-col-1 {
+  float: right;
+  width: 700px;
+}
+
+/* line 2, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+header.page-header {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+}
+
+/* line 8, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+.header-strip-1 {
+  background: #3497db none;
+}
+/* line 10, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+.header-strip-1 .logo {
+  float: left;
+  width: 125px;
+}
+/* line 13, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+.header-strip-1 .logo a {
+  display: block;
+  height: 52px;
+  background: url("../../images/logo.png") no-repeat left center;
+}
+
+/* line 21, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu {
+  float: right;
+  width: 220px;
+  padding-top: 11px;
+}
+
+/* line 26, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+.mega-menu-title-nav-wrapper {
+  position: relative;
+}
+
+/* line 29, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-title {
+  cursor: pointer;
+  background: white url("../../images/nav-heading-bg.png") no-repeat 200px 50%;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  line-height: 19px;
+  height: 24px;
+  color: #2c3d50;
+  padding: 5px 30px 0 8px;
+  overflow: hidden;
+}
+/* line 38, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-title .img {
+  float: left;
+  text-align: center;
+  height: 19px;
+  width: 20px;
+  overflow: hidden;
+}
+/* line 45, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-title .name {
+  float: left;
+  padding-left: 8px;
+  width: 154px;
+  font-weight: bold;
+}
+
+/* line 52, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper {
+  position: absolute;
+  top: 33px;
+  right: 0;
+  padding-top: 8px;
+  display: none;
+  width: 460px;
+  background: url("../../images/mega-menu-arrow.png") no-repeat 440px 0;
+  line-height: 16px;
+  font-size: 0.8125em;
+}
+/* line 61, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper .menu-wrapper {
+  background: rgba(48, 65, 83, 0.95);
+}
+/* line 64, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper a, #mega-menu-popper span {
+  display: block;
+}
+/* line 67, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper a {
+  color: #fff;
+  line-height: 16px;
+}
+/* line 71, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper a:hover, #mega-menu-popper .topic-active a {
+  text-decoration: underline;
+}
+/* line 74, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper .img {
+  float: left;
+  text-align: center;
+  height: 16px;
+  width: 20px;
+  overflow: hidden;
+}
+/* line 81, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper .title {
+  float: left;
+  padding-left: 8px;
+  width: 115px;
+}
+/* line 86, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper .home {
+  padding: 15px 300px 15px 15px;
+}
+/* line 89, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper .topics {
+  border-top: solid 1px #63717e;
+  border-bottom: solid 1px #63717e;
+  padding: 15px 0 5px 15px;
+}
+/* line 94, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper .nav-col {
+  float: left;
+  width: 143px;
+}
+/* line 97, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper .nav-col li {
+  padding-bottom: 15px;
+}
+/* line 101, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper .extras {
+  padding: 15px 15px 20px 15px;
+}
+/* line 103, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper .extras a {
+  float: left;
+  width: 143px;
+}
+/* line 106, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_header.scss */
+#mega-menu-popper .extras a.about {
+  float: right;
+}
+
+/* line 1, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-desc-title-wrapper {
+  background: #fff;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px;
+  border-bottom: solid 3px #c7c8cd;
+  border-top: solid 5px #9b59b6;
+}
+/* line 6, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+body.node-type-audio .content-desc-title-wrapper {
+  border-top-color: #e74c3c;
+}
+/* line 9, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+body.node-type-document .content-desc-title-wrapper {
+  border-top-color: #33cc66;
+}
+
+/*** section titles *******************************************/
+/* line 16, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-titles {
+  line-height: 1em;
+  padding: 10px 28px 0;
+}
+/* line 19, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-titles .h1-provider {
+  float: left;
+  width: 580px;
+}
+/* line 23, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-titles h1 {
+  border-bottom: none;
+  font-weight: bold;
+}
+/* line 27, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-titles .view-providers {
+  /*padding-top: 5px;*/
+  font-size: 0.875em;
+}
+/* line 31, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-titles .view-navigation {
+  width: 304px;
+  float: right;
+  text-align: right;
+  font-size: 1.125em;
+  color: #2c3d50;
+}
+/* line 37, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-titles .view-navigation a {
+  display: block;
+  color: #2c3d50;
+}
+/* line 41, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-titles .view-navigation span {
+  display: block;
+  float: right;
+  line-height: 16px;
+}
+/* line 46, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-titles .view-navigation .img {
+  padding-right: 6px;
+}
+
+/*** content area with player and description ****************/
+/* line 53, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-desc-wrapper {
+  padding: 10px 30px 15px;
+  border-top: solid 1px #ccc;
+  margin-top: 6px;
+}
+
+/* line 58, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-player {
+  float: left;
+  width: 480px;
+}
+
+/* line 62, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-desc {
+  float: right;
+  width: 370px;
+}
+/* line 65, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-desc h2 {
+  margin-bottom: 15px;
+  font-weight: normal;
+  line-height: 1em;
+  font-size: 1.125em;
+}
+/* line 71, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-desc .body {
+  height: 165px;
+  overflow: hidden;
+}
+/* line 75, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-desc .links {
+  border-top: solid 1px #ccc;
+  padding-top: 10px;
+  margin-top: 2px;
+  height: 40px;
+  overflow: hidden;
+}
+/* line 81, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-desc .links .btn {
+  float: left;
+  width: 99px;
+  text-transform: none;
+}
+/* line 86, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-desc .links .download {
+  background-image: url("../../images/btn-icon-download.png");
+}
+/* line 89, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-desc .links .share {
+  margin-right: 10px;
+  width: 189px;
+  background-image: url("../../images/btn-icon-recommend.png");
+}
+/* line 94, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.content-desc .links .ajax-progress {
+  display: none;
+}
+
+/* line 100, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+body.node-type-document .content-player {
+  cursor: pointer;
+  position: relative;
+}
+/* line 103, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+body.node-type-document .content-player img {
+  display: block;
+}
+/* line 106, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+body.node-type-document .content-player .document-icon {
+  width: 66px;
+  height: 70px;
+  position: absolute;
+  left: 207px;
+  top: 90px;
+  background: url("../../images/content-icons.png") no-repeat 0 -93px;
+}
+
+/* line 114, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player {
+  border: solid 1px #ccc;
+  line-height: 1em;
+  margin-top: 48px;
+}
+/* line 118, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player a {
+  display: block;
+  text-indent: -9999px;
+  overflow: hidden;
+}
+/* line 123, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .button-wrapper {
+  float: left;
+  width: 130px;
+  background: url("../../images/audio-player/btn-bg.jpg") no-repeat 0 0;
+  color: #fff;
+  text-align: center;
+  height: 128px;
+}
+/* line 131, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #btn {
+  height: 100px;
+  overflow: hidden;
+}
+/* line 134, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #btn a {
+  background: url("../../images/audio-player/btn-play.png") no-repeat center center;
+  height: 100px;
+}
+/* line 137, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #btn a.jp-pause {
+  background-image: url("../../images/audio-player/btn-pause.png");
+}
+/* line 142, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .progress-wrapper {
+  float: right;
+  width: 348px;
+}
+/* line 146, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .wave-form {
+  height: 68px;
+  padding: 7px 15px 0;
+  position: relative;
+}
+/* line 150, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .wave-form img {
+  display: block;
+}
+/* line 154, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .waves-wrapper {
+  position: relative;
+}
+/* line 157, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .field-name-field-wave-form-orange {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 60px;
+  width: 0;
+  overflow: hidden;
+}
+/* line 164, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .progress-time-vol {
+  background: #e8e8e8;
+  border-top: solid 1px #ccc;
+  padding: 8px 15px;
+  height: 38px;
+}
+/* line 170, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #progress {
+  height: 20px;
+  margin-bottom: 3px;
+}
+/* line 176, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .jp-seek-bar {
+  height: 10px;
+  background: #cdc6c2;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -o-border-radius: 12px;
+  border-radius: 12px;
+  border-bottom: solid 2px #eee;
+  border-top: solid 2px #818181;
+  padding: 0 2px;
+}
+/* line 184, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .jp-play-bar {
+  height: 100%;
+  background: #e84c3c;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -o-border-radius: 12px;
+  border-radius: 12px;
+  position: relative;
+  overflow: visible !important;
+}
+/* line 191, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .scrubber {
+  background: #dad6d4;
+  width: 16px;
+  height: 16px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+  border: solid 2px #eee;
+  position: absolute;
+  right: -8px;
+  top: -6px;
+  -webkit-box-shadow: 0 3px 6px 0 #666666;
+  -moz-box-shadow: 0 3px 6px 0 #666666;
+  box-shadow: 0 3px 6px 0 #666666;
+}
+/* line 201, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .time-volume {
+  height: 20px;
+}
+/* line 204, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #volume {
+  float: left;
+  width: 200px;
+}
+/* line 207, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #volume a {
+  background: url("../../images/audio-player/volume-controls.png") no-repeat 0 -15px;
+  height: 15px;
+  width: 18px;
+  display: block;
+}
+/* line 212, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #volume a:hover {
+  background-position: 0 0;
+}
+/* line 215, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #volume a.jp-mute {
+  background-position: -36px -15px;
+}
+/* line 217, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #volume a.jp-mute:hover {
+  background-position: -36px 0;
+}
+/* line 221, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #volume a.jp-unmute {
+  background-position: -18px -15px;
+}
+/* line 223, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player #volume a.jp-unmute:hover {
+  background-position: -18px 0;
+}
+/* line 229, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .mute-unmute {
+  float: left;
+  width: 18px;
+  padding-right: 4px;
+}
+/* line 234, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .volume-bar {
+  float: left;
+  width: 46px;
+  padding: 5px 6px 0 0;
+}
+/* line 239, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .max-volume {
+  float: left;
+  width: 18px;
+}
+/* line 243, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .jp-volume-bar {
+  background: #cdcdcd;
+  height: 5px;
+  cursor: pointer;
+}
+/* line 248, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .jp-volume-bar-value {
+  height: 100%;
+  background: #e84c3c;
+}
+/* line 252, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#audio-player .total-time {
+  float: right;
+  width: 110px;
+  text-align: right;
+  font-style: italic;
+  font-size: 0.8125em;
+}
+
+/*** content meta info **********************************************/
+/* line 262, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#content-meta-info {
+  margin: 15px 0 150px;
+  position: relative;
+}
+
+/* line 266, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.meta-content-wrapper {
+  background: white url("../../images/meta-content-border-bg.gif") repeat-y 525px 0;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px;
+  border-bottom: solid 3px #c7c8cd;
+  overflow: hidden;
+}
+/* line 271, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.meta-content-wrapper a, .meta-content-wrapper span, .meta-content-wrapper img {
+  display: block;
+}
+
+/* line 275, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.tab-title {
+  padding-bottom: 3px;
+  font-weight: normal;
+  font-size: 1.125em;
+  background: url("../../images/tab-playlist-icon.png") no-repeat 0 0;
+  padding-left: 30px;
+}
+/* line 281, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.tab-title a {
+  text-decoration: underline;
+  display: inline;
+  color: #2c3d50;
+  font-weight: bold;
+}
+/* line 287, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments .tab-title {
+  padding-bottom: 28px;
+  background-position: 0 3px;
+  background-image: url("../../images/tab-comments-icon.png");
+}
+
+/*** playlist wrapper *************************************************/
+/* line 295, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist {
+  float: left;
+  width: 478px;
+  padding: 17px 21px 50px 28px;
+}
+/* line 299, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist ul a {
+  padding: 0 0 0 30px;
+}
+/* line 302, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-content {
+  padding: 10px 0 0 30px;
+  border-left: solid 1px #ccc;
+  position: relative;
+}
+/* line 307, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .counter-no {
+  font-weight: bold;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+  border-radius: 15px;
+  background: #fff;
+  border: solid 1px #ccc;
+  position: absolute;
+  left: -14px;
+  top: 47px;
+  overflow: hidden;
+}
+/* line 320, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .content-wrapper {
+  padding-bottom: 10px;
+  border-bottom: solid 1px #ccc;
+}
+/* line 324, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .img {
+  float: left;
+  padding-right: 15px;
+  width: 130px;
+  position: relative;
+}
+/* line 330, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .icon {
+  position: absolute;
+  background: url("../../images/content-icons.png") no-repeat 0 0;
+  height: 33px;
+  width: 33px;
+  left: 43px;
+  top: 23px;
+}
+/* line 336, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-type-video .icon {
+  background-position: -33px 0;
+}
+/* line 339, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-type-document .icon {
+  background-position: -66px 0;
+}
+/* line 342, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .txt {
+  float: left;
+  width: 260px;
+}
+/* line 346, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .title {
+  font-weight: bold;
+  color: #666;
+  line-height: 18px;
+}
+/* line 354, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-before-active a {
+  border-bottom: solid 1px #ccc;
+}
+/* line 357, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-before-active .content-wrapper {
+  border-bottom: none;
+}
+/* line 362, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-after-active a {
+  border-top: solid 1px #ccc;
+}
+/* line 367, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-first a {
+  padding-top: 25px;
+}
+/* line 370, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-first .counter-no {
+  top: 28px;
+}
+/* line 373, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-first .series-item-content {
+  padding-top: 0;
+}
+/* line 378, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-last a {
+  padding-bottom: 40px;
+}
+/* line 381, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-last .content-wrapper {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+/* line 387, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-active a {
+  border: solid 1px #fff;
+  background: #eaebf1;
+}
+/* line 391, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-active .counter-no {
+  border: none;
+  background: url("../../images/playlist-active.png") no-repeat 0 0;
+  text-indent: -999px;
+  top: 50px;
+  left: -11px;
+}
+/* line 397, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-active.series-item-first {
+  margin-top: 25px;
+}
+/* line 399, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-active.series-item-first .counter-no {
+  top: 30px;
+}
+/* line 403, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-active .content-wrapper {
+  border-bottom: none;
+}
+/* line 406, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .series-item-active .series-item-content {
+  padding-left: 31px;
+  border-left: none;
+}
+/* line 412, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .related-content .counter-no {
+  /*text-indent: -999px;
+  background: #ccc;*/
+  display: none;
+}
+/* line 417, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .related-content .series-item-content {
+  padding-left: 0;
+  border-left: none;
+}
+/* line 421, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#playlist .related-content .txt {
+  width: 303px;
+}
+
+/*** comments *******************************************************/
+/* line 428, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments {
+  float: right;
+  padding: 17px 25px 50px 18px;
+  width: 370px;
+  margin: 0;
+}
+/* line 433, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments .comment {
+  padding: 10px 5px 10px 50px;
+  background: url("../../images/commenter-bg.png") no-repeat 0 10px;
+  border-bottom: solid 1px #CCC;
+}
+/* line 438, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments .indented {
+  margin-left: 72px;
+}
+/* line 440, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments .indented .comment {
+  padding-left: 0;
+}
+/* line 446, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments .author-time {
+  line-height: 1em;
+  padding: 5px 0;
+}
+/* line 450, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments .comment-time {
+  float: right;
+  width: 125px;
+  color: #666;
+  text-align: right;
+}
+/* line 456, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments .author {
+  font-size: 1em;
+  float: left;
+  width: 190px;
+}
+/* line 462, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments ul.links li.first {
+  padding-left: 0;
+}
+/* line 465, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments ul.links a {
+  display: inline;
+}
+/* line 469, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form {
+  padding-bottom: 5px;
+  border-bottom: solid 1px #CCC;
+}
+/* line 472, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form span {
+  display: inline;
+}
+/* line 475, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form label {
+  line-height: 1em;
+  color: #666;
+  font-size: 0.875em;
+  padding: 0 0 9px;
+}
+/* line 481, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form .form-item {
+  margin: 0;
+}
+/* line 484, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form input.form-text, #comments form.comment-form textarea {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background: #f2f2f2;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-style: italic;
+  color: #999;
+  font-size: 13px;
+  line-height: 18px;
+  border: solid 1px #ccc;
+}
+/* line 495, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form input.form-text:hover, #comments form.comment-form input.form-text:active, #comments form.comment-form textarea:hover, #comments form.comment-form textarea:active {
+  background: #fff;
+  border-color: #3498db;
+}
+/* line 500, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form textarea {
+  height: 85px;
+}
+/* line 503, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form input.form-text {
+  width: 610px;
+}
+/* line 506, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form #edit-comment-body {
+  margin: 22px 0 10px;
+}
+/* line 509, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form #edit-actions {
+  overflow: hidden;
+}
+/* line 512, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#comments form.comment-form input#edit-submit {
+  float: right;
+  width: 170px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  text-transform: none;
+}
+
+/*** related content *******************************************************/
+/* line 523, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#related-info .wikipedia-wrapper {
+  border-bottom: solid 1px #dbdbdb;
+  border-top: solid 1px #dbdbdb;
+}
+/* line 526, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#related-info .wikipedia-wrapper h2 {
+  padding: 30px 36px 15px;
+}
+/* line 529, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#related-info .wikipedia-wrapper a {
+  padding: 0 36px 30px;
+}
+/* line 532, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#related-info .wikipedia-wrapper .img {
+  float: left;
+  width: 130px;
+}
+/* line 536, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#related-info .wikipedia-wrapper .desc {
+  float: right;
+  width: 475px;
+}
+/* line 540, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#related-info .wikipedia-wrapper .title {
+  font-weight: bold;
+  color: #666;
+}
+/* line 546, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#related-info.only-wikipedia .wikipedia-wrapper {
+  border: none;
+}
+
+/*** meta content navigation *******************************************************/
+/* line 553, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+ul.meta-content-menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 245px;
+}
+/* line 557, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+ul.meta-content-menu li {
+  padding: 0 0 1px 25px;
+}
+/* line 559, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+ul.meta-content-menu li a.btn {
+  font-size: 0.9375em;
+  padding: 0 0 0 20px;
+  line-height: 50px;
+  height: 50px;
+  text-align: left;
+  text-transform: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
+/* line 568, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+ul.meta-content-menu li.active {
+  padding-left: 0;
+}
+/* line 570, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+ul.meta-content-menu li.active a.btn {
+  padding-left: 45px;
+}
+
+/*** recommend loaders *******************************************************/
+/* line 580, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.block-ui-msg .img {
+  background: url("../../images/loader-wheel.gif") no-repeat center bottom;
+  height: 60px;
+}
+/* line 584, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.block-ui-msg .msg {
+  font-size: 1.4em;
+  padding: 12px 0;
+}
+/* line 588, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+.block-ui-msg .link {
+  margin: 0 auto;
+  padding-bottom: 12px;
+  width: 300px;
+}
+
+/*** document content  *******************************************************************************************/
+/* line 597, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#pdf-reader {
+  display: none;
+}
+/* line 599, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#pdf-reader, #pdf-reader .field, #pdf-reader .field-items, #pdf-reader .field-item, #pdf-reader iframe.pdf {
+  height: 100% !important;
+}
+/* line 602, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_content_pages.scss */
+#pdf-reader .close-btn {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: -35px;
+  right: -35px;
+  background: url("../../images/close-btn.png") no-repeat 0 0;
+  cursor: pointer;
+}
+
+/* line 2, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+#infscr-loading {
+  position: fixed;
+  text-align: center;
+  bottom: 30px;
+  left: 42%;
+  z-index: 100;
+  background: #fff;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  color: #222;
+  font-size: 15px;
+  font-weight: bold;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  border-radius: 10px;
+  display: none;
+}
+
+/* line 19, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+ul.listing-page-items li {
+  float: left;
+  width: 220px;
+  padding: 0 20px 30px 0;
+}
+/* line 23, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+ul.listing-page-items li.col-last-column {
+  padding-right: 0;
+}
+
+/* line 29, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper {
+  display: block;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px;
+  border-top: solid 5px #9b59b6;
+  border-bottom: solid 2px #c7c8cd;
+  background: #fff;
+  color: #666;
+  font-size: 0.8125em;
+}
+/* line 37, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper a, .listing-item-wrapper span, .listing-item-wrapper img {
+  display: block;
+}
+/* line 40, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .topic-language {
+  padding: 7px 10px 10px 10px;
+  line-height: 18px;
+}
+/* line 44, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .topic {
+  float: left;
+  width: 140px;
+}
+/* line 47, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .topic a {
+  color: #2c3d50;
+}
+/* line 50, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .topic span {
+  float: left;
+}
+/* line 53, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .topic .icon {
+  padding-right: 6px;
+}
+/* line 57, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .language {
+  float: right;
+  color: #999;
+  width: 55px;
+  text-align: right;
+}
+/* line 63, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .title {
+  padding: 14px 10px;
+  font-size: 1.23077em;
+  line-height: 20px;
+  border-bottom: solid 1px #dbdbdb;
+  font-weight: bold;
+  color: #2c3d50;
+}
+/* line 71, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .duration-comments {
+  padding: 7px 0;
+  line-height: 22px;
+}
+/* line 75, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .duration {
+  float: left;
+  width: 97px;
+  padding-left: 13px;
+}
+/* line 80, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .comments {
+  float: left;
+  width: 109px;
+  border-left: solid 1px #dbdbdb;
+}
+/* line 84, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .comments span {
+  float: right;
+}
+/* line 88, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .comment-icon {
+  width: 17px;
+  height: 14px;
+  background: url("../../images/comment-icon.png") no-repeat;
+  margin: 5px 5px 0 20px;
+}
+/* line 94, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .comment-count {
+  color: #3399cc;
+  padding-right: 10px;
+}
+/* line 101, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .img {
+  height: 130px;
+  position: relative;
+}
+/* line 105, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper .type-icon {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: url("../../images/content-icons.png") no-repeat -120px -33px;
+  left: 80px;
+  top: 35px;
+}
+/* line 111, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper.type-audio {
+  border-top-color: #e74c3c;
+}
+/* line 113, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper.type-audio span.type-icon {
+  background-position: 0 -33px;
+}
+/* line 117, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper.type-document {
+  border-top-color: #33cc66;
+}
+/* line 119, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper.type-document span.type-icon {
+  background-position: -60px -33px;
+}
+/* line 123, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.listing-item-wrapper a:hover {
+  text-decoration: none;
+}
+/* line 126, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+li.col-new .listing-item-wrapper .comments {
+  background: url("../../images/icon-listing-page-new.png") no-repeat 10px 50%;
+}
+/* line 129, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+li.col-recommended .listing-item-wrapper .comments {
+  background: url("../../images/icon-listing-page-recommended.png") no-repeat 10px 50%;
+}
+
+/****
+ * sidebar navigation on category pages ***************************************************************/
+/* line 138, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+#block-views-utilities-block-2,
+.category-nav-wrapper {
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-radius: 6px;
+  border-top: solid 5px #3497db;
+  border-bottom: solid 2px #c7c8cd;
+  background: #fff;
+}
+
+/* line 144, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+#block-views-utilities-block-2 {
+  margin-bottom: 35px;
+  padding: 20px 20px 30px;
+  color: #999;
+}
+/* line 148, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+#block-views-utilities-block-2 h2 {
+  line-height: 1em;
+  color: #3497db;
+  padding-bottom: 20px;
+  font-size: 18px;
+}
+/* line 154, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+#block-views-utilities-block-2 .views-field-body {
+  font-size: 15px;
+  line-height: 18px;
+}
+
+/* line 160, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.category-nav-wrapper h2 {
+  line-height: 35px;
+  color: #2c3d50;
+  padding-left: 30px;
+  background: url("../../images/category-menu-h2-bg.gif") no-repeat 9px 50%;
+  font-size: 15px;
+}
+/* line 167, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.category-nav-wrapper .view-content {
+  padding-bottom: 6px;
+  border-bottom: solid 2px #e2e2e2;
+}
+/* line 170, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.category-nav-wrapper .view-content li {
+  padding-bottom: 1px;
+}
+/* line 173, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.category-nav-wrapper .view-content a {
+  display: block;
+  padding: 6px 0 6px 45px;
+  background: white url("../../images/category-menu-a-bg.gif") no-repeat 31px 14px;
+  color: #2c3d50;
+  font-size: 15px;
+  line-height: 18px;
+}
+/* line 180, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.category-nav-wrapper .view-content a:hover, .category-nav-wrapper .view-content a.active {
+  background-color: #71b6e6;
+  background-image: url("../../images/category-menu-a-hover-bg.gif") !important;
+  color: #fff;
+  text-decoration: none;
+}
+/* line 187, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.category-nav-wrapper .view-content li.type-video a {
+  background-image: url("../../images/category-menu-a-video-bg.gif");
+}
+/* line 190, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.category-nav-wrapper .view-content li.type-document a {
+  background-image: url("../../images/category-menu-a-document-bg.gif");
+}
+/* line 193, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.category-nav-wrapper .view-content li.type-audio a {
+  background-image: url("../../images/category-menu-a-audio-bg.gif");
+}
+/* line 198, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.category-nav-wrapper .block-last .view-content {
+  border-bottom: none;
+}
+
+/* Isotope Transitions
+------------------------------- */
+/* line 208, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.isotope,
+.isotope .item {
+  -webkit-transition-duration: 0.8s;
+  -moz-transition-duration: 0.8s;
+  -ms-transition-duration: 0.8s;
+  -o-transition-duration: 0.8s;
+  transition-duration: 0.8s;
+}
+
+/* line 216, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.isotope {
+  -webkit-transition-property: height, width;
+  -moz-transition-property: height, width;
+  -ms-transition-property: height, width;
+  -o-transition-property: height, width;
+  transition-property: height, width;
+}
+
+/* line 224, D:/Webserver/htdocs/ugyouthportal/sites/ugyouthportal/themes/ugyouthportal_theme/css/sass/partials/_listing_pages.scss */
+.isotope .item {
+  -webkit-transition-property: -webkit-transform, opacity;
+  -moz-transition-property: -moz-transform, opacity;
+  -ms-transition-property: -ms-transform, opacity;
+  -o-transition-property: top, left, opacity;
+  transition-property: transform, opacity;
+}

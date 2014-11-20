@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the uPortal Features feature.
+ */
+
+include_once('uportal_features.features.inc');

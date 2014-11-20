@@ -1,0 +1,103 @@
+
+body {
+	word-wrap: break-word;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin: 0;
+	@include adjust-font-size-to($body-font-size);
+	background: #eaebf0;
+	color: #999;
+}
+.element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+  overflow: hidden;
+  height: 1px;
+}
+h1 {
+	body.no-h1 &,
+	body.listing-page & {
+		@extend .element-invisible;
+	}
+	font-weight: bold;
+	color: #666;
+	@include ems_font_size(24px, $body-font-size);
+	line-height: 1em;
+	padding-bottom: 3px;
+	border-bottom: solid 1px #ccc;
+}
+h2 {
+	color: #666;
+	@include ems_font_size(16px, $body-font-size);
+	font-weight: bold;
+	line-height: 1em;
+}
+.centred-strip {
+	width: 940px;
+	margin: 0 auto;
+}
+a, li a.active, input {
+	color: #999;
+	text-decoration: none;
+	&.btn {
+		display: block;
+		background: #2c3e50 none;
+		color: #fff;
+		@include ems_font_size(15px, $body-font-size);
+		text-transform: uppercase;
+		line-height: 40px;
+		text-align: center;
+		height: 40px;
+		@include border-radius(4px);
+		border: none;
+		cursor: pointer;
+		@include single-transition(color);
+		@include single-transition(background-color);
+		&:hover, &.active {
+			text-decoration: none;
+			background-color: #3498db;
+			color: #fff;
+		}
+	}
+	&.btn-icon {
+		text-align: left;
+		padding-left: 36px;
+		background-position: 10px center;
+		background-repeat: no-repeat;
+	}
+}
+a:hover {
+	text-decoration: underline;
+}
+.management-content-btns-wrapper {
+    background: #333;
+    padding: 7px 0;
+	a.edit-content-btn {
+		text-transform: none;
+		float: right;
+		padding: 0 24px;
+		@include ems_font_size(13px, $body-font-size);
+		line-height: 35px;
+		height: 35px;
+        color: #2c3e50;
+        background-color: #eee;
+        &:hover {
+          color: #fff;
+          background-color: #3497db;
+        }
+	}
+    .management-node-status {
+      float: left;
+      background: #f9efaa;
+      padding: 0 10px;
+      color: #333;
+      margin: 8px 0 0 0;
+      line-height: 20px;
+      font-size: 0.75em;
+      font-weight: bold;
+      &.status-1 {
+        background: #038c13;
+        color: #fff;
+      }
+    }
+}

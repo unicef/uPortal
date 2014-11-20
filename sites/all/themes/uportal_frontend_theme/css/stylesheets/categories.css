@@ -1,0 +1,272 @@
+@CHARSET "UTF-8";
+
+/**
+ * icon font
+ *
+ *	home : 1F344
+ *	culture : 263A
+ *	maths : 002B
+ *	rights_safety : 0422
+ *	health : 229E
+ *	computers : 1F737
+ *	agriculture : 1F319
+ */
+
+
+/*** styles for category: Agriculture*******/
+
+.category-class-nid-10.content-listing-item .icon,
+.category-class-nid-10 ul.home-page-listing-ul .icon,
+.category-class-nid-10 .type-icon,
+ul.home-page-listing-ul .category-class-nid-10 .type-icon {
+	background: rgba(2,160,84,0.7);
+}
+body.category-class-nid-10 #block-system-main .content-links,
+.category-class-nid-10 .category-icon,
+.category-class-nid-10 .node-series-category-title,
+.category-class-nid-10 .video-player-real-wrapper #video-player #btn a,
+.category-class-nid-10 .category-list-item-title-block .category-icon {
+	background: rgba(2,160,84,1);
+}
+.category-class-nid-10 span.series-category-title,
+.category-class-nid-10.content-listing-item span.series-category-title,
+.series-list-item .category-class-nid-10 span.title,
+.category-class-nid-10 .category-list-item-title-block .title-number {
+	color: rgba(2,160,84,1);
+}
+.category-class-nid-10 .uportal-icon:before {
+	content: "\0041";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-10 span.icon {
+	border-top-color: rgba(2,160,84,1);
+	color: rgba(2,160,84,1);
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-10 span.icon:before {
+	content: "\0041";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-10.active span.icon,
+nav#category-menu ul.main-menu li.category-class-link-nid-10 a:hover span.icon {
+	background-color: rgba(2,160,84,1);
+	color: #fff;
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-10 span.title {
+	color: rgba(2,160,84,1);
+}
+
+
+
+
+/*** styles for category: Computer Lessons*******/
+
+.category-class-nid-245.content-listing-item .icon,
+.category-class-nid-245 ul.home-page-listing-ul .icon,
+.category-class-nid-245 .type-icon,
+ul.home-page-listing-ul .category-class-nid-245 .type-icon {
+	background: rgba(95,99,170,0.7);
+}
+body.category-class-nid-245 #block-system-main .content-links,
+.category-class-nid-245 .category-icon,
+.category-class-nid-245 .node-series-category-title,
+.category-class-nid-245 .video-player-real-wrapper #video-player #btn a,
+.category-class-nid-245 .category-list-item-title-block .category-icon {
+	background: rgba(95,99,170,1);
+}
+.category-class-nid-245 span.series-category-title,
+.category-class-nid-245.content-listing-item span.series-category-title,
+.series-list-item .category-class-nid-245 span.title,
+.category-class-nid-245 .category-list-item-title-block .title-number {
+	color: rgba(95,99,170,1);
+}
+.category-class-nid-245 .uportal-icon:before {
+	content: "\0043";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-245 span.icon {
+	border-top-color: rgba(95,99,170,1);
+	color: rgba(95,99,170,1);
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-245 span.icon:before {
+	content: "\0043";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-245.active span.icon,
+nav#category-menu ul.main-menu li.category-class-link-nid-245 a:hover span.icon {
+	background-color: rgba(95,99,170,1);
+	color: #fff;
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-245 span.title {
+	color: rgba(95,99,170,1);
+}
+
+
+
+
+/*** styles for category: Culture*******/
+
+.category-class-nid-100.content-listing-item .icon,
+.category-class-nid-100 ul.home-page-listing-ul .icon,
+.category-class-nid-100 .type-icon,
+ul.home-page-listing-ul .category-class-nid-100 .type-icon {
+	background: rgba(209,135,19,0.7);
+}
+body.category-class-nid-100 #block-system-main .content-links,
+.category-class-nid-100 .category-icon,
+.category-class-nid-100 .node-series-category-title,
+.category-class-nid-100 .video-player-real-wrapper #video-player #btn a,
+.category-class-nid-100 .category-list-item-title-block .category-icon {
+	background: rgba(209,135,19,1);
+}
+.category-class-nid-100 span.series-category-title,
+.category-class-nid-100.content-listing-item span.series-category-title,
+.series-list-item .category-class-nid-100 span.title,
+.category-class-nid-100 .category-list-item-title-block .title-number {
+	color: rgba(209,135,19,1);
+}
+.category-class-nid-100 .uportal-icon:before {
+	content: "\0044";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-100 span.icon {
+	border-top-color: rgba(209,135,19,1);
+	color: rgba(209,135,19,1);
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-100 span.icon:before {
+	content: "\0044";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-100.active span.icon,
+nav#category-menu ul.main-menu li.category-class-link-nid-100 a:hover span.icon {
+	background-color: rgba(209,135,19,1);
+	color: #fff;
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-100 span.title {
+	color: rgba(209,135,19,1);
+}
+
+
+
+
+/*** styles for category: Health*******/
+
+.category-class-nid-113.content-listing-item .icon,
+.category-class-nid-113 ul.home-page-listing-ul .icon,
+.category-class-nid-113 .type-icon,
+ul.home-page-listing-ul .category-class-nid-113 .type-icon {
+	background: rgba(232,76,60,0.7);
+}
+body.category-class-nid-113 #block-system-main .content-links,
+.category-class-nid-113 .category-icon,
+.category-class-nid-113 .node-series-category-title,
+.category-class-nid-113 .video-player-real-wrapper #video-player #btn a,
+.category-class-nid-113 .category-list-item-title-block .category-icon {
+	background: rgba(232,76,60,1);
+}
+.category-class-nid-113 span.series-category-title,
+.category-class-nid-113.content-listing-item span.series-category-title,
+.series-list-item .category-class-nid-113 span.title,
+.category-class-nid-113 .category-list-item-title-block .title-number {
+	color: rgba(232,76,60,1);
+}
+.category-class-nid-113 .uportal-icon:before {
+	content: "\0047";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-113 span.icon {
+	border-top-color: rgba(232,76,60,1);
+	color: rgba(232,76,60,1);
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-113 span.icon:before {
+	content: "\0047";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-113.active span.icon,
+nav#category-menu ul.main-menu li.category-class-link-nid-113 a:hover span.icon {
+	background-color: rgba(232,76,60,1);
+	color: #fff;
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-113 span.title {
+	color: rgba(232,76,60,1);
+}
+
+
+
+
+/*** styles for category: Math & Science*******/
+
+.category-class-nid-11.content-listing-item .icon,
+.category-class-nid-11 ul.home-page-listing-ul .icon,
+.category-class-nid-11 .type-icon,
+ul.home-page-listing-ul .category-class-nid-11 .type-icon {
+	background: rgba(8,130,115,0.7);
+}
+body.category-class-nid-11 #block-system-main .content-links,
+.category-class-nid-11 .category-icon,
+.category-class-nid-11 .node-series-category-title,
+.category-class-nid-11 .video-player-real-wrapper #video-player #btn a,
+.category-class-nid-11 .category-list-item-title-block .category-icon {
+	background: rgba(8,130,115,1);
+}
+.category-class-nid-11 span.series-category-title,
+.category-class-nid-11.content-listing-item span.series-category-title,
+.series-list-item .category-class-nid-11 span.title,
+.category-class-nid-11 .category-list-item-title-block .title-number {
+	color: rgba(8,130,115,1);
+}
+.category-class-nid-11 .uportal-icon:before {
+	content: "\004D";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-11 span.icon {
+	border-top-color: rgba(8,130,115,1);
+	color: rgba(8,130,115,1);
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-11 span.icon:before {
+	content: "\004D";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-11.active span.icon,
+nav#category-menu ul.main-menu li.category-class-link-nid-11 a:hover span.icon {
+	background-color: rgba(8,130,115,1);
+	color: #fff;
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-11 span.title {
+	color: rgba(8,130,115,1);
+}
+
+
+
+
+/*** styles for category: Rights & Safety*******/
+
+.category-class-nid-114.content-listing-item .icon,
+.category-class-nid-114 ul.home-page-listing-ul .icon,
+.category-class-nid-114 .type-icon,
+ul.home-page-listing-ul .category-class-nid-114 .type-icon {
+	background: rgba(148,74,137,0.7);
+}
+body.category-class-nid-114 #block-system-main .content-links,
+.category-class-nid-114 .category-icon,
+.category-class-nid-114 .node-series-category-title,
+.category-class-nid-114 .video-player-real-wrapper #video-player #btn a,
+.category-class-nid-114 .category-list-item-title-block .category-icon {
+	background: rgba(148,74,137,1);
+}
+.category-class-nid-114 span.series-category-title,
+.category-class-nid-114.content-listing-item span.series-category-title,
+.series-list-item .category-class-nid-114 span.title,
+.category-class-nid-114 .category-list-item-title-block .title-number {
+	color: rgba(148,74,137,1);
+}
+.category-class-nid-114 .uportal-icon:before {
+	content: "\0052";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-114 span.icon {
+	border-top-color: rgba(148,74,137,1);
+	color: rgba(148,74,137,1);
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-114 span.icon:before {
+	content: "\0052";
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-114.active span.icon,
+nav#category-menu ul.main-menu li.category-class-link-nid-114 a:hover span.icon {
+	background-color: rgba(148,74,137,1);
+	color: #fff;
+}
+nav#category-menu ul.main-menu li.category-class-link-nid-114 span.title {
+	color: rgba(148,74,137,1);
+}
+
+
+

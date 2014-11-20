@@ -1,0 +1,60 @@
+name = uPortal Backend Theme
+description = uPortal Backend Theme
+core = 7.x
+
+stylesheets[screen, projection][] = scripts/plugins/mediaelement.js/mediaelementplayer.min.css
+stylesheets[screen, projection][] = scripts/plugins/chosen/chosen.min.css
+stylesheets[screen, projection][] = css/stylesheets/screen.css
+
+scripts[] = scripts/initiator.js
+scripts[] = scripts/plugins/areyousure/jquery.are-you-sure.js
+scripts[] = scripts/plugins/jquery.once.min.js
+scripts[] = scripts/plugins/chosen/chosen.jquery.min.js
+scripts[] = scripts/plugins/jquery.ui.core.min.js
+scripts[] = scripts/plugins/jquery.ui.widget.min.js
+scripts[] = scripts/plugins/jquery.ui.mouse.min.js
+scripts[] = scripts/plugins/jquery.ui.tabs.min.js
+scripts[] = scripts/plugins/jquery.ui.sortable.min.js
+scripts[] = scripts/plugins/jquery.iframe-transport.js
+scripts[] = scripts/plugins/jquery.fileupload.js
+scripts[] = scripts/plugins/jquery.tinysort.min.js
+scripts[] = scripts/plugins/jquery.form.min.js
+scripts[] = scripts/plugins/jquery.liveFilter.js
+scripts[] = scripts/plugins/jquery.highlight.js
+scripts[] = scripts/plugins/jquery.validate.min.js
+scripts[] = scripts/plugins/mediaelement.js/mediaelement-and-player.min.js
+scripts[] = scripts/plugins/jplayer/jquery.jplayer.min.js
+scripts[] = scripts/plugins/jquery.blockUI.min.js
+scripts[] = scripts/plugins/jquery.ba-resize.min.js
+scripts[] = scripts/bulkuploader.js
+scripts[] = scripts/bulk_edit.js
+scripts[] = scripts/dashboard.js
+scripts[] = scripts/content_listing.js
+scripts[] = scripts/edit_content.js
+scripts[] = scripts/edit_content_uploader.js
+scripts[] = scripts/reorder_series.js
+scripts[] = scripts/reorder_lesson_plans.js
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+;; keep managing metadata scripts lower so that their behaviors may be last in chain
+;; to support upper functionality
+;; - TODO: better way is to write another function to initiate metadata functionality
+;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+scripts[] = scripts/managing_metadata.js
+scripts[] = scripts/managing_metadata_categories.js
+scripts[] = scripts/managing_metadata_tags.js
+scripts[] = scripts/managing_users.js
+scripts[] = scripts/userform.js
+
+scripts[] = scripts/script.js
+
+regions[header_top_manager_menu] = Header Top Manager Menu
+regions[header_strip_2] = Header Strip 2
+regions[header_strip_3] = Header Strip 3
+regions[sidebar_first] = Left sidebar
+regions[before_content] = Before Content
+regions[content] = Content
+regions[sidebar_second] = Right Sidebar

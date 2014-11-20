@@ -1,0 +1,269 @@
+
+body.front {
+    .full-page-wrapper {
+        padding-bottom: 0;
+    }
+    .page-content .centred-strip {
+        width: 100%;
+    }
+    .page-cols-holder {
+        width: 945px;
+        margin: 0 auto;
+    }
+    .after-cols {
+        background: url("../../images/home-page-jagged-edge.png") repeat-x 0 0;
+        padding-top: 5px;
+    }
+    .region-after-cols {
+        background: #b0b5a9;
+        padding: 25px 0 90px;
+    }
+}
+
+#block-views-categories-block-1 {
+    margin: 0 auto;
+    width: 945px;
+}
+
+ul.home-page-listing-ul {
+    li {
+        float: left;
+        width: 221px;
+        margin-right: 20px;
+        margin-bottom: 20px;
+        &.col-3, &.col-last {
+            margin-right: 0;
+        }
+    }
+    a, span, img {
+        display: block;
+    }
+    img {
+        width: 100%; height: 130px;
+    }
+    a {
+        background: #fff;
+        height: 265px;
+        @include border-bottom-left-radius(5px);
+        @include border-bottom-right-radius(5px);
+        @include single-box-shadow(#ccc, 0, 0, 3px, 1px, false); //color, hoff, voff, blur, spread, inset
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    span {
+        &.img {
+            height: 130px;
+            position: relative;
+        }
+        &.node-status {
+            position: absolute;
+            width: 20px; height: 20px;
+            display: none;
+            z-index: 10;
+            #block-ugyouthportal-listing-content & {
+                display: block;
+            }
+        }
+        &.desc {
+            padding: 30px 12px 0;
+        }
+        &.series-category-title {
+            line-height: 1em;
+            padding-bottom: 6px;
+            @include ems_font_size(11px, $body-font-size);
+            font-weight: bold;
+            height: 11px;
+            overflow: hidden;
+        }
+        &.content-title {
+            font-weight: bold;
+            @include ems_font_size(15px, $body-font-size);
+            line-height: 1.2em;
+            height: 56px;
+            margin-bottom: 9px;
+            overflow: hidden;
+        }
+        &.language {
+            @include ems_font_size(11px, $body-font-size);
+            line-height: 1em;
+        }
+        &.icon {
+            position: absolute;
+            width: 44px; height: 44px;
+            border: solid 2px rgba(255,255,255,0.8);
+            @include border-radius(24px);
+            left: 88px; top: 106px;
+            background: rgba(209,135,19,0.7);
+            z-index: 10;
+            span {
+                background: url("../../images/listing-icons-by-type.png") no-repeat 0 0;
+                width: 26px; height: 15px;
+                margin: 13px auto 0;
+            }
+        }
+        &.hover-title {
+            background: rgba(0,0,0,0.8);
+            position: absolute;
+            left: 0; top: 0;
+            text-align: center;
+            color: #fff;
+            font-size: 14px;
+            line-height: 1.4em;
+            @include opacity(0);
+            @include single-transition(opacity);
+            width: 221px; height: 130px;
+            .wrapper {
+                padding: 20px 15px 0;
+            }
+            .category-title {
+                font-weight: bold;
+                margin-bottom: 6px;
+            }
+        }
+    }
+    a:hover span.hover-title {
+        @include opacity(1);
+    }
+    li.col-recommended, li.col-new, li.col-downloaded {
+        span.node-status {
+            background: #303c40 url("../../images/home-page-new-recommend-icons.png") no-repeat 0 0;
+        }
+    }
+    li.col-new span.node-status {
+        background-position: 0 -20px;
+    }
+    li.series-list-item span.node-status {
+        left: -15px; top: -15px;
+    }
+    .node-type-video {
+        span.icon {
+            span {
+                background-position: 0 0;
+                width: 26px; height: 15px;
+                margin: 13px auto 0;
+            }
+        }
+    }
+    li.series-list-item {
+        width: 703px;
+        a {
+            padding: 15px;
+            height: 235px;
+            @include border-radius(5px);
+        }
+        img {
+            width: 200px; height: 120px;
+        }
+        .series-images {
+            float: left;
+            width: 402px;
+            position: relative;
+        }
+        span.hover-title {
+            width: 402px;
+            height: 236px;
+            span.wrapper {
+                padding: 90px 237px 0 20px;
+            }
+        }
+        span.icon {
+            left: 178px; top: 94px;
+        }
+        .img {
+            float: left;
+            width: 200px; height: 117px;
+            overflow: hidden;
+            border-right: solid 1px #fff;
+            border-bottom: solid 1px #fff;
+        }
+        .series-info {
+            float: right;
+            width: 260px;
+        }
+        .label {
+            line-height: 1em;
+            font-weight: bold;
+            @include ems_font_size(12px, $body-font-size);
+        }
+        .title {
+            margin: 9px 0 18px;
+            @include ems_font_size(18px, $body-font-size);
+            font-weight: bold;
+            line-height: 1.2em;
+        }
+        span.desc {
+            padding: 0;
+            height: 165px;
+            overflow: hidden;
+        }
+    }
+    li.category-list-item-title-block {
+        span.category-icon {
+            height: 130px;
+            position: relative;
+            .parent-icon {
+                color: #fff;
+                text-align: center;
+                line-height: 130px;
+                font-size: 120px;
+                opacity: 1;
+                @include single-transition(opacity);
+            }
+            .hover-icons {
+                opacity: 0;
+                @include single-transition(opacity);
+                position: absolute;
+                left: 0; top: 0; right: 0; bottom: 0;
+                overflow: hidden;
+                .uportal-icon {
+                    opacity: 0.8;
+                    position: absolute;
+                    font-size: 100px;
+                    width: 65px; height: 65px; line-height: 65px;
+                    color: #fff;
+                    &.icon-1 {
+                        top: -15px; left: 75px;
+                        @include rotate(-15deg);
+                    }
+                    &.icon-2 {
+                        left: 10px; top: 30px;
+                        @include rotate(0);
+                    }
+                    &.icon-3 {
+                        left: 62px; top: 65px;
+                        @include rotate(-25deg);
+                    }
+                    &.icon-4 {
+                        left: 140px; top: 90px;
+                        @include rotate(35deg);
+                    }
+                    &.icon-5 {
+                        left: 155px; top: 15px;
+                        @include rotate(-15deg);
+                    }
+                }
+            }
+        }
+        span.title-number {
+            text-align: center;
+            line-height: 1em;
+            @include ems_font_size(20px, $body-font-size);
+            padding-top: 30px;
+            span.number {
+                font-weight: bold;
+                padding-top: 8px;
+            }
+        }
+        a:hover {
+            span.category-icon {
+                .parent-icon {
+                    opacity: 0;
+                }
+                .hover-icons {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

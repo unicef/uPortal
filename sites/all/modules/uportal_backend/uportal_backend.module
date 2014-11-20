@@ -1,0 +1,798 @@
+<?php
+
+/**
+ * Ensure that this module's weight is greater than pubdlcnt
+ * for proper download stats
+ */
+
+
+global $uportal_backend_data;
+$uportal_backend_data['body_classes'] = array();
+$uportal_backend_data['empty_callbacks'] = array (
+	//array( 'url'=>'management/dashboard', 'title'=>'Dashboard', 'description'=>'Dashboard' ),
+);
+
+
+/**
+ * implementing hook_hook_info
+ *  - showing Drupal where to find the other hooks
+ *
+ *  clashing somehow with ugyouthportal to give error in module.inc array to string conversion -- WHY!!
+ *
+ *  replaced with module_load_include in hook_init
+ *
+function uportal_backend_hook_info() {
+	$hooks = array();
+	$uportal_backend_hooks = array (
+		'block'	=>	array('block_info', 'block_view',),
+	);
+	foreach ($uportal_backend_hooks as $group => $hooks_array) {
+		foreach ($hooks_array as $hook) {
+			$hooks[$hook] = array('group' => $group);
+		}
+	}
+	return $hooks;
+}
+/** END ************************/
+
+
+/**
+ * implement hook_menu
+ *
+ */
+function uportal_backend_menu() {
+	global $uportal_backend_data;
+	$items = array();
+	
+	//empty callbacks
+	foreach ($uportal_backend_data['empty_callbacks'] as $callback) {
+		$items[$callback['url']] = array (
+			'title' => $callback['title'],
+			'description' => $callback['description'],
+			'page callback' => 'uportal_backend_empty_content',
+			'access arguments' => array('create audio content'),
+			'type' => MENU_CALLBACK,
+		);
+	}
+	
+	$items['management/dashboard'] = array (
+		'title'							=>	'Management Dashboard',
+		'description'				=>	'Management Dashboard',
+		'page callback'			=>	'uportal_backend_dashboard',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.dashboard.inc',
+	);
+	$items['management/bulk-uploader'] = array (
+		'page callback'			=>	'uportal_backend_bulk_upload',
+		'access arguments'	=>	array('edit content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.bulk_uploader.inc',
+	);
+	$items['management/content-listing/%'] = array (
+		'title'							=>	'Content',
+		'description'				=>	'Content',
+		'page callback'			=>	'uportal_backend_content_listing',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.content_listing.inc',
+	);
+	$items['management/bulk-uploader/test'] = array (
+		'page callback'			=>	'uportal_backend_bulk_upload_test',
+		'access arguments'	=>	array('edit content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.bulk_uploader.inc',
+	);
+	$items['management/bulk-uploader/create-nodes'] = array (
+		'page callback'			=>	'uportal_backend_bulk_upload_create_nodes',
+		'access arguments'	=>	array('edit content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.bulk_uploader.inc',
+	);
+	$items['management/delete-nodes'] = array (
+		'page callback'			=>	'uportal_backend_delete_nodes',
+		'access arguments'	=>	array('edit content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.bulk_uploader.inc',
+	);
+	$items['management/bulk-uploader/cancel-upload'] = array (
+		'page callback'			=>	'uportal_backend_bulk_upload_cancel_upload',
+		'access arguments'	=>	array('edit content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.bulk_uploader.inc',
+	);
+	$items['management/edit-content/%'] = array (
+		'page callback'			=>	'uportal_backend_edit_content',
+		'access arguments'	=>	array('edit content'),
+		'type'							=>	MENU_CALLBACK,
+		'page arguments'		=>	array(2),
+		'file'							=>	'uportal_backend.edit_content.inc',
+	);
+	$items['management/edit-content/ajax-handler'] = array (
+		'page callback'			=>	'uportal_backend_edit_content_ajax_handler',
+		'access arguments'	=>	array('edit content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.edit_content.inc',
+	);
+	$items['management/edit-content/ajax-handler/read-only'] = array (
+		'page callback'			=>	'uportal_backend_edit_content_ajax_handler_read_only',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.edit_content.inc',
+	);
+	$items['management/edit-content/ajax-handler/lesson-plans'] = array (
+		'page callback'			=>	'uportal_backend_edit_content_ajax_handler_lesson_plans',
+		'access arguments'	=>	array('manage lesson plans'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.edit_content.inc',
+	);
+	$items['management/edit-content/ajax-handler/series'] = array (
+		'page callback'			=>	'uportal_backend_edit_content_ajax_handler_series',
+		'access arguments'	=>	array('manage series'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.edit_content.inc',
+	);
+	$items['management/bulk-editor'] = array (
+		'page callback'			=>	'uportal_backend_bulk_editor',
+		'access arguments'	=>	array('edit content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.bulk_editor.inc',
+	);
+	$items['management/bulk-editor/read-only'] = array (
+		'page callback'			=>	'uportal_backend_bulk_editor_read_only',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.bulk_editor.inc',
+	);
+	$items['management/bulk-editor/series'] = array (
+		'page callback'			=>	'uportal_backend_bulk_editor_series',
+		'access arguments'	=>	array('manage series'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.bulk_editor.inc',
+	);
+	$items['management/bulk-editor/lesson-plans'] = array (
+		'page callback'			=>	'uportal_backend_bulk_editor_lesson_plans',
+		'access arguments'	=>	array('manage lesson plans'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.bulk_editor.inc',
+	);
+	$items['management/metadata/categories'] = array (
+		'title'							=>	'Categories',
+		'description'				=>	'Categories',
+		'page callback'			=>	'uportal_backend_metadata_categories',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.categories.inc',
+	);
+	$items['management/metadata/categories/operations'] = array (
+		'page callback'			=>	'uportal_backend_metadata_categories_operations',
+		'access arguments'	=>	array('manage categories'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.categories.inc',
+	);
+	$items['management/metadata/categories/operations/read-only'] = array (
+		'page callback'			=>	'uportal_backend_metadata_categories_operations_read_only',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.categories.inc',
+	);
+	$items['management/metadata/content-providers'] = array (
+		'title'							=>	'Content Providers',
+		'description'				=>	'Content Providers',
+		'page callback'			=>	'uportal_backend_metadata_content_providers',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.metadata.inc',
+	);
+	$items['management/metadata/languages'] = array (
+		'title'							=>	'Languages',
+		'description'				=>	'Languages',
+		'page callback'			=>	'uportal_backend_metadata_languages',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.metadata.inc',
+	);
+	$items['management/metadata/tags'] = array (
+		'title'							=>	'Tags',
+		'description'				=>	'Tags',
+		'page callback'			=>	'uportal_backend_metadata_tags',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.metadata.inc',
+	);
+	$items['management/metadata/form-handler'] = array (
+		'page callback'			=>	'uportal_backend_metadata_form_handler',
+		'access arguments'	=>	array('manage metadata'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.metadata.inc',
+	);
+	$items['management/metadata/form-handler/read-only'] = array (
+		'page callback'			=>	'uportal_backend_metadata_form_handler',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.metadata.inc',
+	);
+	$items['management/metadata/form-handler/tags'] = array (
+		'page callback'			=>	'uportal_backend_metadata_form_handler_tags',
+		'access arguments'	=>	array('manage tags'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.metadata.inc',
+	);
+	$items['management/metadata/form-handler/categories'] = array (
+		'page callback'			=>	'uportal_backend_metadata_form_handler_categories',
+		'access arguments'	=>	array('manage categories'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.metadata.inc',
+	);
+	$items['management/metadata/form-handler/content-providers'] = array (
+		'page callback'			=>	'uportal_backend_metadata_form_handler_content_providers',
+		'access arguments'	=>	array('manage content providers'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.metadata.inc',
+	);
+	$items['management/metadata/form-handler/languages'] = array (
+		'page callback'			=>	'uportal_backend_metadata_form_handler_languages',
+		'access arguments'	=>	array('manage languages'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.metadata.inc',
+	);
+	$items['management/users'] = array (
+		'title'							=>	'Users',
+		'description'				=>	'Users',
+		'page callback'			=>	'uportal_backend_manage_users_list',
+		'access arguments'	=>	array('view backend'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.users.inc',
+	);
+	$items['management/users/edit/%user'] = array (
+		'title'							=>	'Edit User',
+		'page callback'			=>	'drupal_get_form',
+		'page arguments'		=>	array('user_profile_form', 3),
+		'access arguments'	=>	array('manage users'),
+    'type'							=> 	MENU_CALLBACK,
+    'file' 							=>	'user.pages.inc',
+		'file path'					=>	drupal_get_path('module', 'user'),
+	);
+	$items['management/users/add'] = array (
+    'title' 						=> 	'Add New User',
+		'page callback'			=>	'user_admin',
+    'page arguments' 		=> 	array('create'),
+    'access arguments'	=> 	array('manage users'),
+		'type'							=>	MENU_CALLBACK,
+    'file' 							=>	'user.admin.inc',
+		'file path'					=>	drupal_get_path('module', 'user'),
+	);
+	$items['management/users/delete'] = array (
+		'page callback'			=>	'uportal_backend_manage_users_delete',
+		'access arguments'	=>	array('manage users'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.users.inc',
+	);
+	$items['management/batch-update'] = array (
+		'page callback'			=>	'uportal_backend_batch_update',
+		'access arguments'	=>	array('edit content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.batch_update.inc',
+	);
+	$items['management/import'] = array (
+		'page callback'			=>	'uportal_backend_import_content',
+		'access arguments'	=>	array('import content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'uportal_backend.import_content.inc',
+	);
+	
+	return $items;
+}
+/** END ************************/
+
+
+/**
+ * custom permissions in line with established roles
+ */
+function uportal_backend_permission() {
+  return array(
+    'view backend' => array(
+      'title' => t('View management backend'),
+      'description' => t('Allows user to view backend.'),
+    ),
+    'edit content' => array(
+      'title' => t('Can edit content'),
+      'description' => t('Allows user to edit content.'),
+    ),
+    'manage categories' => array(
+      'title' => t('Can manage Categories'),
+      'description' => t('Allows user to manage categories.'),
+    ),
+    'manage series' => array(
+      'title' => t('Can manage Series'),
+      'description' => t('Allows user to manage series.'),
+    ),
+    'manage lesson plans' => array(
+      'title' => t('Can manage lesson plans'),
+      'description' => t('Allows user to manage lesson plans.'),
+    ),
+    'manage content providers' => array(
+      'title' => t('Can manage content providers'),
+      'description' => t('Allows user to manage content providers.'),
+    ),
+    'manage languages' => array(
+      'title' => t('Can manage languages'),
+      'description' => t('Allows user to manage languages.'),
+    ),
+    'manage tags' => array(
+      'title' => t('Can manage tags'),
+      'description' => t('Allows user to manage tags.'),
+    ),
+    'manage users' => array(
+      'title' => t('Can manage users'),
+      'description' => t('Allows user to manage users.'),
+    ),
+    'manage metadata' => array(
+      'title' => t('Can manage metadata'),
+      'description' => t('Allows user to manage metadata.'),
+    ),
+    'import content' => array(
+      'title' => t('Can import content'),
+      'description' => t('Allows user to import content.'),
+    ),
+  );
+}
+/** ENDS *****************************************/
+
+
+/**
+ * ensure management theme for management/* URLs
+ */
+function uportal_backend_custom_theme() {
+  if (arg(0) == 'management') {
+    return 'uportal_backend_theme';
+  }
+}
+/** ENDS *****************************************/
+
+
+/**
+ * return empty content
+ */
+function uportal_backend_empty_content() {
+	return '';
+}
+/** END ************************/
+
+
+/**
+ * preprocess page
+ */
+function uportal_backend_preprocess_html(&$vars) {
+	global $uportal_backend_data;
+	global $user;
+	
+	//add in user rights classes
+	$available_perms = uportal_backend_permission();
+	$management_perms = array_keys($available_perms);
+	$user_perms = user_role_permissions($user->roles);
+	$current_user_perms = array();
+	foreach($management_perms as $management_perm) {
+		$current_user_perms[$management_perm] = false;
+		foreach ($user_perms as $role_id => $role_perms) {
+			if (isset($role_perms[$management_perm]) && $role_perms[$management_perm]) {
+				$current_user_perms[$management_perm] = true;
+				break;
+			}
+		}
+	}
+	
+	//add user perms to body tag
+	$vars['attributes_array']['data-allowed-perms'] = array();
+	$vars['attributes_array']['data-disallowed-perms'] = array();
+	foreach ($current_user_perms as $perm_name => $perm_allowed) {
+		if ($perm_allowed) {
+			$vars['attributes_array']['data-allowed-perms'][] = drupal_html_class($perm_name);
+			$vars['classes_array'][] = drupal_html_class('perm-allowed-'.$perm_name);
+		} else {
+			$vars['attributes_array']['data-disallowed-perms'][] = drupal_html_class($perm_name);
+			$vars['classes_array'][] = drupal_html_class('perm-disallowed-'.$perm_name);
+		}
+	}
+	
+	foreach ($uportal_backend_data['body_classes'] as $body_class) {
+		$vars['classes_array'][] = $body_class;
+	}
+}
+/** END ************************/
+
+
+
+/**
+ * redirect to user/login
+ */
+function uportal_backend_init() {
+	global $user;
+	if ($_GET['q']=='user' && $user->uid<1) {
+		drupal_goto('user/login');
+	}
+	
+	//dirty hack to include stubborn missing file when editing nodes
+	if ($_GET['q'] == 'system/ajax') {
+    module_load_include('inc', 'node', 'node.pages');
+  }	
+	//include files
+	module_load_include('inc', 'uportal_backend', 'uportal_backend.utilities');
+	module_load_include('inc', 'uportal_backend', 'uportal_backend.block');
+	
+}
+/** END ************************/
+
+
+/**
+ * implement node_access
+ * - override drupal default permissions not allowing users to view others' drafts
+ */
+function uportal_backend_node_access($node, $op, $account) {
+  if ($op == 'view') {
+    if (user_access('view backend', $account)) {
+      return NODE_ACCESS_ALLOW;
+    }
+  }
+
+  return NODE_ACCESS_IGNORE;
+}
+/** END ************************/
+
+
+/**
+ * implement node_presave
+ * 	- force status change, not working now due to weird drupal permissions
+ * 	- use custom form field
+ */
+function uportal_backend_node_presave($node) {
+	if (isset($_POST['custom_node_status'])) {
+		$node->status = $_POST['custom_node_status'];
+	}
+}
+/** END ************************/
+
+
+/**
+ * implement node_insert
+ * 	- node queue data
+ * 	- file size and duration
+ */
+function uportal_backend_node_insert($node) {
+}
+/** END ************************/
+
+
+/**
+ * implement hook_field_attach_submit
+ */
+function uportal_backend_field_attach_submit($entity_type, $entity, $form, &$form_state) {
+	module_load_include('inc', 'uportal_backend', 'uportal_backend.edit_content');
+	_uportal_backend_edit_content_attach_temporary_data($entity_type, $entity, $form, $form_state);
+}
+/** END ************************/
+
+
+/**
+ * implement hook_node_validate
+ */
+function uportal_backend_node_validate($node, $form, &$form_state) {
+  //dsm($node);
+}
+/** ENDS *****************************************/
+
+
+/**
+ * process field_image after all others
+ */
+function _uportal_backend_file_process_field_image($element, &$form_state, $form) {
+	$nid = $form['#entity']->nid;
+	$new_button_id_remove = $element['#id'].'-remove-button';
+	$new_button_id_upload = $element['#id'].'-upload-button';
+	$element['remove_button']['#id'] = $new_button_id_remove;
+	$element['upload_button']['#id'] = $new_button_id_upload;
+	return $element;
+}
+/** ENDS *****************************************/
+
+
+/**
+ * implement hook_forms
+ *
+ * maps my unique node forms to node_form callback
+ * https://api.drupal.org/api/drupal/modules%21system%21system.api.php/function/hook_forms/7
+ */
+function uportal_backend_forms($form_id, $args) {
+	$forms = array();
+	$node_forms = array( 'video'=>1, 'audio'=>1, 'document'=>1, );
+	if (count($args) && isset($args[0]->type) && isset($node_forms[$args[0]->type])) {
+		$node = $args[0];
+		if (isset($node->nid) && $form_id==($node->type.'_node_form_'.$node->nid)) {
+			$forms[$form_id]['callback'] = 'node_form';
+		}
+	}
+	return $forms;
+}
+/** ENDS *****************************************/
+
+
+/**
+ * redirect user form in submit handler, form_alter not working
+ */
+function _uportal_user_form_submit_redirect(&$form, &$form_state) {
+	$form_state['redirect'] = 'management/users';
+}
+/** ENDS *****************************************/
+
+
+/**
+ * implement form alter
+ */
+function uportal_backend_form_alter(&$form, &$form_state, $form_id) {
+	$form_id_parts = explode('_', $form_id);
+	
+	//alter user forms
+	if ($form_id=='user_register_form' || $form_id=='user_profile_form') {
+		$form['#submit'][] = '_uportal_user_form_submit_redirect';
+	}
+	
+	//alter node forms
+	$node_types = array( 'audio'=>1, 'video'=>1, 'document'=>1, );
+	if (count($form_id_parts)>=4 && isset($node_types[$form_id_parts[0]]) && is_numeric($form_id_parts[3])) {
+		$real_form_id = $form_id_parts[0].'_'.$form_id_parts[1].'_'.$form_id_parts[2];
+		switch ($real_form_id) {
+			case 'document_node_form':
+			case 'audio_node_form':
+			case 'video_node_form':
+				form_load_include($form_state, 'inc', 'node', 'node.pages');
+				
+				//turn "Language Neutral" to "- None -"
+				$form['language']['#options']['und'] = '- None -';
+				
+				if (isset($form_state['node']->nid) && $form_state['node']->nid>0) {
+					$nid = $form_state['node']->nid;
+					$form['#theme'][] = 'video_node_form';
+					
+					//give title field a unique id
+					if (isset($form['title'])) {
+						$form['title']['#id'] = 'edit-title-'.$nid;
+					}
+					
+					//give body field a unique id
+					if (isset($form['body']['und']) && isset($form['body']['und'][0])) {
+						$form['body']['und'][0]['value']['#id'] = 'edit-body-und-0-value-'.$nid;
+					}
+					
+					//add custom field for tags from all vocabularies
+					//function is in uportal_backend.edit_content.inc, which is already included because these forms are called via a page callback defined in the same file, but just include it all the same
+					module_load_include('edit_content.inc', 'uportal_backend');
+					_uportal_backend_edit_content_create_custom_tags_select($form, $form_state, $form_id);
+					
+					//give image field a unique id
+					if (isset($form['field_image']['und']) && isset($form['field_image']['und'][0])) {
+						$form['field_image']['#id'] = 'edit-field-image-'.$nid;
+						$form['field_image']['und']['#id'] = 'edit-field-image-und-'.$nid;
+						$form['field_image']['und'][0]['#id'] = 'edit-field-image-und-0-'.$nid;
+						$form['field_image']['und'][0]['#process'][] = '_uportal_backend_file_process_field_image';
+					}
+					
+					$form['actions']['custom-submit-'.$nid] = $form['actions']['submit'];
+					$form['actions']['custom-submit-'.$nid]['#ajax'] = array(
+						'callback' => 'uportal_backend_node_form_callback',
+					);
+					unset($form['actions']['submit']);
+					
+					//call validate and submit from my custom callback for smooth flow
+					// http://www.digitalkozak.com/blog/drupal-7-exposing-ajaxified-node-creation-form-visitors
+					$form['#validate'] = array();
+					$form['actions']['custom-submit-'.$nid]['#submit'] = array();
+					
+				} else {
+					$form['actions']['submit']['#ajax'] = array(
+						'callback' => 'uportal_backend_node_form_callback',
+					);
+				}
+				break;
+		}
+	}
+}
+/** END ************************/
+
+
+/**
+ * modify views
+ */
+function uportal_backend_views_pre_render(&$view) {
+	global $uportal_backend_data;
+	
+	//add a views class to the body
+	if (strpos($view->current_display, 'page')!==false) {
+		$uportal_backend_data['body_classes'][] = 'views-'.$view->name.'-'.$view->current_display;
+	}
+	
+	//content listing - individual items page
+	if ($view->name == 'management_content_listing' && $view->current_display=='block_1') {
+		module_load_include('content_listing.inc', 'uportal_backend');
+		_uportal_content_listing_views_pre_render_individual_items($view);
+	}
+}
+/** ENDS *****************************************/
+
+
+/**
+ * alter views query for content listing
+ */
+function uportal_backend_views_query_alter(&$view, &$query) {
+	//content listing - individual items page
+	if ($view->name == 'management_content_listing' && $view->current_display=='block_1') {
+		module_load_include('content_listing.inc', 'uportal_backend');
+		_uportal_content_listing_views_query_alter_individual_items($view, $query);
+	}
+
+	//content listing - series page
+	if ($view->name == 'management_content_listing' && $view->current_display=='block_2') {
+		module_load_include('content_listing.inc', 'uportal_backend');
+		_uportal_content_listing_views_query_alter_series($view, $query);
+	}
+
+	//content listing - lesson plans page
+	if ($view->name == 'management_content_listing' && $view->current_display=='block_4') {
+		module_load_include('content_listing.inc', 'uportal_backend');
+		_uportal_content_listing_views_query_alter_lesson_plans($view, $query);
+	}
+	
+	//categories
+	if ($view->name == 'categories' && ($view->current_display=='block_4' || $view->current_display=='block_1')) {
+		_uportal_backend_views_query_alter_categories($view, $query);
+	}
+	
+}
+/** ENDS *****************************************/
+
+
+/**
+ * alter view after it has executed
+ */
+function uportal_backend_views_post_execute(&$view) {
+	
+	//alter lesson plan items results because a nodequeue relationship causes repetition
+	if (
+		($view->name == 'management_content_listing' && $view->current_display=='block_5')
+		|| ($view->name == 'management_lesson_plans' && $view->current_display=='block_lesson_plans_ordered_results')
+	) {
+		module_load_include('content_listing.inc', 'uportal_backend');
+		_uportal_content_listing_views_alter_lesson_plan_items($view);
+	}
+	
+}
+/** ENDS *****************************************/
+
+
+/**
+ * limit categories to only those with published items
+ */
+function _uportal_backend_views_query_alter_categories(&$view, &$query) {
+	
+	//custom where conditions
+	$where_conditions = array();
+	
+	//get only categories with published nids
+	$allowed_category_nids_query = db_select('node', 'n')
+		->distinct()
+		->fields('category', array('field_topic_reference_target_id'))
+		->condition('n.type', array('video','audio','document'), 'IN')
+		->condition('n.status', 1);
+	$allowed_category_nids_query->join('field_data_field_topic_reference', 'category', 'category.entity_id = n.nid');
+	$allowed_category_nids = $allowed_category_nids_query->execute()->fetchCol();
+	
+	//add to where
+	$where_conditions[] = array (
+		'field' => 'node.nid',
+		'value' => $allowed_category_nids,
+		'operator' => 'IN',
+	);
+	
+	//insert conditions
+	if (count($where_conditions)) {
+		$query->where[] = array (
+			'conditions' => $where_conditions,
+			'args' => array(),
+			'type' => 'AND',
+		);
+	}
+	
+}
+/** ENDS *****************************************/
+
+
+/**
+ * Form call back for node form
+ */
+function uportal_backend_node_form_callback($form, &$form_state) {
+	//including this file is not working here, so I put it in hook_init
+	//module_load_include('inc', 'node', 'node.pages');
+	module_load_include('inc', 'uportal_backend', 'uportal_backend.edit_content');
+	$response = uportal_backend_node_edit_form($form, $form_state);
+	return $response;
+}
+/** ENDS *****************************************/
+
+
+/**
+ * Implements hook_page_build()
+ */
+function uportal_backend_page_build(&$page) {
+	global $uportal_backend_data;
+	if (isset($uportal_backend_data['page_type'])) {
+		switch ($uportal_backend_data['page_type']) {
+			case 'management_content_listing':
+				_uportal_backend_content_listing_page_build($page);
+				break;
+			case 'management_metadata_categories':
+				_uportal_backend_metadata_categories_page_build($page);
+				break;
+			case 'management_users_list':
+				_uportal_backend_manage_users_list_page_build($page);
+				break;
+			case 'management_edit_content':
+				_uportal_backend_edit_content_page_build($page);
+				break;
+		}
+	}
+	
+	//check if user is logged in and display manager menu
+	if (user_is_logged_in()) {
+		//management menu
+		global $theme;
+		$display_themes = array (
+			'uportal_frontend_theme' => 1,
+			'uportal_backend_theme' => 1,
+			'ugyouthportal_theme' => 1,
+		);
+		if (isset($display_themes[$theme])) {
+			$uportal_backend_data['body_classes'][] = 'management-menu-active';
+			$management_menu_block = block_load('uportal_backend', 'header_manager_menu');
+			$page['header_top_manager_menu'] = _block_get_renderable_array(_block_render_blocks(array($management_menu_block)));
+		}
+	}
+}
+/** ENDS *****************************************/
+
+
+/**
+ * Implements hook_page_alter()
+ */
+function uportal_backend_page_alter(&$page) {
+	global $uportal_backend_data;
+	if (isset($uportal_backend_data['page_type']) && $uportal_backend_data['page_type']=='management_content_listing') {
+		_uportal_backend_content_listing_page_alter($page);
+	}
+}
+/** ENDS *****************************************/
+
+
+/**
+ * implements hook_user_login()
+ */
+function uportal_backend_user_login(&$edit, $account) {
+  $redirection = 'management/dashboard';
+	
+	// Unless there is already a redirection going, or the user is trying to reset his password, we redirect to $redirection.
+  if (empty($_GET['destination'])
+    && !is_null($redirection)
+    && (!isset($_POST['form_id']) || $_POST['form_id'] != 'user_pass_reset'))
+  {
+    $_GET['destination'] = $edit['redirect'] = $redirection;
+  }
+}
+/** ENDS *****************************************/
+
+
+/**
+ * implements hook_cron
+ */
+function uportal_backend_cron() {
+	module_load_include('cron.inc', 'uportal_backend');
+	_uportal_backend_clear_temporary_files();
+}
+/** ENDS *****************************************/

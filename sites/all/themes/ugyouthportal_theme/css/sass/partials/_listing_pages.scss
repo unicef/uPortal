@@ -1,0 +1,325 @@
+
+#infscr-loading {
+	position: fixed;
+	text-align: center;
+	bottom: 30px;
+	left: 42%;
+	z-index: 100;
+	background: #fff;
+	background: hsla( 0, 0%, 100%, 0.9 );
+	padding: 20px;
+	color: #222;
+	font-size: 15px;
+	font-weight: bold;
+	@include border-radius(10px);
+	display: none;
+	body.not-front & {
+		left: 50%;
+	}
+}
+
+ul.listing-page-items {
+	li {
+		float: left;
+		width: 220px;
+		padding: 0 20px 20px 0;
+		&.col-last-column {
+			padding-right: 0;
+		}
+	}
+}
+.view-listing-pages #pager-wrapper {
+	//display: block !important;
+	//display: none;
+}
+
+.listing-item-wrapper {
+	display: block;
+	@include border-radius(6px);
+	border-top: solid 5px #9b59b6;
+	border-bottom: solid 2px #c7c8cd;
+	background: #fff;
+	color: #666;
+	@include ems_font_size(13px, $body-font-size);
+	a, span, img {
+		display: block;
+	}
+	.topic-language {
+		padding: 7px 10px 10px 10px;
+		line-height: 18px;
+	}
+	.topic {
+		float: left;
+		width: 140px;
+		a {
+			color: #2c3d50;
+		}
+		span {
+			float: left;
+		}
+		.icon {
+			padding-right: 6px;
+            height: 18px;
+            overflow: hidden;
+            img {
+              display: block;
+            }
+		}
+	}
+	.language {
+		float: right;
+		color: #999;
+		width: 55px;
+		text-align: right;
+	}
+	.title {
+		padding: 14px 10px;
+		@include ems_font_size(16px, 13px);
+		line-height: 20px;
+		border-bottom: solid 1px #dbdbdb;
+		font-weight: bold;
+		color: #2c3d50;
+	}
+	.duration-comments {
+		padding: 7px 0;
+		line-height: 22px;
+	}
+	.duration {
+		float: left;
+		width: 75px;
+		padding-left: 13px;
+	}
+	.comments {
+		float: left;
+		width: 131px;
+		border-left: solid 1px #dbdbdb;
+		span {
+			float: right;
+		}
+	}
+	.comment-icon {
+		width: 17px;
+		height: 14px;
+		background: url("../../images/comment-icon.png") no-repeat;
+		margin: 5px 5px 0 20px;
+		.no-comments & {
+			background-image: url("../../images/comment-icon-grey.png");
+		}
+	}
+	.comment-count {
+		color: #3399cc;
+		padding-right: 10px;
+		.no-comments & {
+			color: #999;
+		}
+	}
+	.new {
+		
+	}
+	.img {
+		height: 130px;
+		position: relative;
+	}
+	.type-icon {
+		position: absolute;
+		width: 60px; height: 60px;
+		background: url("../../images/content-icons.png") no-repeat -120px -33px;
+		left: 80px; top: 35px;
+	}
+	&.type-audio {
+		border-top-color: #e74c3c;
+		span.type-icon {
+			background-position: 0 -33px;
+		}
+	}
+	&.type-document {
+		border-top-color: #33cc66;
+		span.type-icon {
+			background-position: -60px -33px;
+		}
+	}
+	a:hover {
+		text-decoration: none;
+	}
+	li.col-new &,
+	li.col-new-recommended & {
+		.duration-comments {
+			background: url("../../images/icon-listing-page-new.png") no-repeat 99px 50%;
+		}
+	}
+	li.col-new-recommended &,
+	li.col-recommended & {
+		.comments {
+			background: url("../../images/icon-listing-page-recommended.png") no-repeat 55px 50%;
+		}
+	}
+}
+
+
+/****
+ * sidebar navigation on category pages ***************************************************************/
+#block-views-utilities-block-3,
+#block-views-utilities-block-2,
+.category-nav-wrapper {
+	@include border-radius(6px);
+	border-top: solid 5px #3497db;
+	border-bottom: solid 2px #c7c8cd;
+	background: #fff;
+}
+#block-views-utilities-block-3,
+#block-views-utilities-block-2 {
+	margin-bottom: 20px;
+	padding: 20px 20px 30px;
+	color: #999;
+	h2 {
+		line-height: 1em;
+		color: #3497db;
+		padding-bottom: 20px;
+		font-size: 18px;
+	}
+	.views-field-body {
+		font-size: 15px;
+		line-height: 18px;
+	}
+}
+#block-views-utilities-block-3 {
+	h2 {
+		padding-bottom: 15px;
+	}
+	height: 114px;
+	padding-bottom: 0;
+}
+ul.listing-filter-nav {
+	li {
+		padding-bottom: 1px;
+	}
+	.link, a.link {
+		display: block;
+		padding: 6px 0 6px 45px;
+		background: #fff url("../../images/category-menu-a-bg.gif") no-repeat 31px 12px;
+		color: #2c3d50;
+		font-size: 15px;
+		line-height: 18px;
+		position: relative;
+		@include single-transition(color);
+		@include single-transition(background-color);
+		.count {
+			color: #999;
+			@include ems_font_size(12px, 15px);
+			display: none;
+		}
+	}
+	.no-link {
+		color: #aaa;
+		background-image: url("../../images/category-menu-a-bg-grey.gif");
+		.count {
+			color: #aaa;
+		}
+	}
+	a {
+		&:hover, &.active {
+			background-color: #71b6e6;
+			background-image: url("../../images/category-menu-a-hover-bg.gif") !important;
+			color: #fff;
+			text-decoration: none;
+			.count {
+				color: #fff;
+			}
+		}
+		&.active span.arrow {
+			position: absolute;
+			background: url("../../images/filter-active-arrow.png");
+			width: 7px;
+			height: 31px;
+			top: 0; right: -7px;
+		}
+	}
+	li.type-video a {
+		background-image: url("../../images/category-menu-a-video-bg.gif");
+	}
+	li.type-document a {
+		background-image: url("../../images/category-menu-a-document-bg.gif");
+	}
+	li.type-audio a {
+		background-image: url("../../images/category-menu-a-audio-bg.gif");
+	}
+}
+ul.index-nav-skill-levels {
+	padding: 0 15px 0 30px;
+	li {
+		float: left;
+		padding: 0 6px 6px 0;
+	}
+	a {
+		display: block;
+		background: #ccc;
+		color: $link-dark-blue;
+		line-height: 25px;
+		padding: 0 12px;
+		@include ems_font_size(13px, 16px);
+		&:hover {
+			text-decoration: none;
+			color: #fff;
+			background: $link-dark-blue;
+		}
+		&.active {
+			color: #fff;
+			background: #71b7e6;
+		}
+	}
+}
+.category-nav-wrapper {
+	h2 {
+		line-height: 35px;
+		color: #2c3d50;
+		padding-left: 30px;
+		background: url("../../images/category-menu-h2-bg.gif") no-repeat 11px 10px;
+		font-size: 15px;
+	}
+	.content {
+		padding-bottom: 6px;
+		border-bottom: solid 2px #e2e2e2;
+	}
+	.block-last {
+		.content {
+			border-bottom: none;
+		}
+	}
+	#block-ugyouthportal-index-nav-tags {
+		.content {
+			padding: 0 15px 30px 30px;
+		}
+		.chosen-container {
+			display: block;
+			width: 100% !important;
+		}
+	}
+}
+
+
+/* Isotope Transitions
+------------------------------- */
+.isotope,
+.isotope .item {
+  -webkit-transition-duration: 0.8s;
+     -moz-transition-duration: 0.8s;
+      -ms-transition-duration: 0.8s;
+       -o-transition-duration: 0.8s;
+          transition-duration: 0.8s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:         top, left, opacity;
+          transition-property:         transform, opacity;
+}

@@ -1,0 +1,357 @@
+/*** header and navigation *******************************************/
+body.index-page {
+ .before-content-wrapper {
+		@include border-radius(6px);
+		border-top: solid 5px #3497db;
+		border-bottom: solid 1px #c7c8cd;
+		background: #fff;
+		height: 134px;
+	}
+	section#main-content {
+		margin-top: 20px;
+		background: #fff;
+		@include border-radius(6px);
+		padding: 0 17px 30px 15px;
+	}
+}
+/*** ENDS ***********************/
+
+/*** no results ************************************************/
+.no-index-results {
+	padding: 24px;
+	font-style: italic;
+}
+.no-index-results-page {
+	font-style: normal;
+	padding: 24px 7px 0;
+	color: #000;
+	p {
+		line-height: 1em;
+		font-weight: bold;
+		margin-bottom: 20px;
+		&.link-btn {
+			margin-bottom: 0;
+		}
+	}
+	a.btn {
+		background-color: #2c3e50;
+		width: 170px;
+		text-transform: none;
+		font-weight: normal;
+		&:hover {
+			background-color: #3498db;
+		}
+	}
+	li {
+		padding: 0 0 6px 22px;
+		background: url("../../images/no-index-results-bullet.gif") no-repeat 4px 9px;
+		a, a.active {
+			color: #333366;
+			text-decoration: underline;
+			font-weight: bold;
+		}
+	}
+}
+/*** ENDS ***********************/
+
+/*** index search form *****************************************/
+#block-ugyouthportal-index-search-form {
+	padding: 18px 17px 0 15px;
+	height: 44px;
+	form {
+		overflow: hidden;
+	}
+	.form-item {
+		margin: 0;
+		width: 601px;
+		float: left;
+		border: 2px solid #959ea7;
+		border-right: none;
+	}
+	input#edit-search-field {
+		line-height: 36px;
+		height: 36px;
+		margin: 0;
+		border: none;
+		padding-left: 10px;
+		font-size: 23px;
+		width: 601px;
+		@include box-sizing('border-box');
+	}
+	input#edit-submit {
+		float: right;
+		width: 65px;
+		height: 40px;
+		border: none;
+		line-height: 40px;
+		color: #fff;
+		text-indent: -999px;
+		overflow: hidden;
+		margin: 0;
+		font-size: 19px;
+		font-weight: bold;
+		background: #2c3e50 url("../../images/index-search-btn.png") no-repeat center center;
+		text-align: center;
+	}
+}
+/*** ENDS ***********************/
+
+
+/*** main nav on index page ***********************************/
+#block-ugyouthportal-index-main-nav .content {
+	padding: 0 15px;
+	height: 45px;
+	li {
+		display: inline-block;
+		padding-left: 1px;
+	}
+	span.arrow {
+		height: 10px;
+		width: 100%;
+		display: none;
+		position: absolute;
+		top: 45px; left: 0;
+		background: url("../../images/arrow-index-page.png") no-repeat center center;
+	}
+	a {
+		display: block;
+		line-height: 45px;
+		padding: 0 21px;
+		color: #2c3e50;
+		font-weight: bold;
+		position: relative;
+		@include single-transition(color);
+		@include single-transition(background-color);
+		&.active,
+		&:hover {
+			background: #71b7e6;
+			color: #fff;
+			text-decoration: none;
+		}
+		&.active {
+			span.arrow {
+				display: block;
+			}
+		}
+	}
+}
+/*** ENDS ***********************/
+
+
+/*** index page - clear search link ***********/
+#block-ugyouthportal-index-clear-search {
+	height: 27px;
+	text-align: right;
+	line-height: 27px;
+	padding-right: 17px;
+	a {
+		text-decoration: underline;
+		color: #2c3e50;
+	}
+}
+/*** ENDS ***********************/
+
+
+
+/*** landing index page ***************************************/
+#block-ugyouthportal-index-page-header {
+	padding-top: 10px;
+}
+.topic-header {
+	border-bottom: 1px solid #d9d9d9;
+	padding-bottom: 7px;
+	position: relative;
+	margin-left: 25px;
+	a, img {
+		display: block;
+		&:hover {
+			text-decoration: none;
+		}
+	}
+	.img {
+		width: 19px;
+		padding: 3px 6px 0 0;
+		position: absolute;
+		left: -24px; top: 0;
+	}
+	.txt {
+		font-weight: bold;
+		color: #2c3e50;
+		height: 24px;
+		line-height: 24px;
+		text-decoration: none;
+	}
+	.topic-link {
+		float: right;
+		text-align: right;
+		a {
+			font-weight: bold;
+			color: #2c3e50;
+		}
+	}
+}
+.index-all-content {
+	.topic-results {
+		padding: 10px 0 5px 0;
+	}
+	.topic-footer {
+		text-align: right;
+		line-height: 1em;
+		padding-bottom: 15px;
+		a {
+			text-decoration: underline;
+			color: #2c3e50;
+		}
+	}
+}
+/*** ENDS ***********************/
+
+/** content *****************************************************************/
+.index-topic-content {
+	padding: 10px 0 0;
+	position: relative;
+	margin-left: 25px;
+	a, img, span {
+		display: block;
+	}
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+	.icon {
+		position: absolute;
+		width: 40px;
+		height: 40px;
+		left: 45px;
+		top: 19px;
+		background: url("../../images/content-icons-small.png") no-repeat 0 -87px; 
+	}
+		.type-document .icon {
+			background-position: 0 -46px;
+		}
+		.type-audio .icon {
+			background-position: 0 0px;                
+		}
+	.counter {
+		width: 27px; height: 27px;
+		line-height: 27px;
+		@include border-radius(50%);
+		border: 2px solid #ccc;
+		text-align: center;
+		position: absolute;
+		right: 0; top: 33%;
+	}
+	.img {
+		float: left;
+		width: 130px; height: 80px;
+		padding-right: 20px;
+		position: relative;
+	}
+	.small-img {
+		float: left;
+		width: 65px; height: 40px;
+		background: url("../../images/index-default-small-img.jpg");
+	}
+	.txt {
+		float: left;
+		width: 450px;
+	}
+	.title {
+		color: #2c3e50;
+		font-weight: bold;
+		line-height: 1em;
+		padding: 0 0 9px;
+	}
+	.body {
+		line-height: 1.4em;
+		font-weight: 400;
+		color: #666;
+	}
+	.bottom-border {
+		height: 10px;
+		border-bottom: solid 1px #d9d9d9;
+		clear: both;
+	}
+	&.last-row {
+		padding-bottom: 0;
+		.bottom-border {
+			border-bottom: none;
+			height: 15px;
+		}
+	}
+}
+/*** ENDS ***********************/
+
+/** showing active filters ****************************************************/
+#block-ugyouthportal-index-filters-show-active {
+	padding: 15px 0 5px 0;
+	.content {
+		padding: 6px 0;
+		height: 25px;
+		line-height: 25px;
+		background: #fff;
+		border-bottom: solid 1px #d9d9d9;
+		@include ems_font_size(15px, $body-font-size);
+		font-weight: bold;
+		a:hover {
+			text-decoration: none;
+		}
+	}
+	.index-active-filters {
+		float: left;
+		width: 590px;
+		li {
+			display: inline-block;
+		}
+		a, span {
+			display: block;
+			color: #2c3e50;
+		}
+		a {
+			background: url("../../images/index-active-filter-arrow.png") no-repeat left center;
+			padding: 0 10px 0 20px;
+			&.category {
+				span {
+					background: no-repeat 5px 50%;
+					padding-left: 26px;
+				}
+			}
+		}
+		li {
+			&.first {
+				a {
+					padding-left: 0;
+					background: none;
+				}
+			}
+		}
+	}
+	.reset-btn {
+		float: right;
+		width: 75px;
+		background: url("../../images/index-filters-reset-btn.png") no-repeat 50px 50%;
+		display: none;
+		font-weight: normal;
+		a {
+			display: block;
+			color: #2c3e50;
+			text-align: right;
+			padding-right: 33px;
+		}
+	}
+	
+	/***
+	 * removing this functionality
+	 * 
+	&:hover {
+		.content {
+			background-color: #d9d9d9;
+		}
+		.reset-btn {
+			display: block;
+		}
+	}
+	*************************/
+}
+/*** ENDS ***********************/
+

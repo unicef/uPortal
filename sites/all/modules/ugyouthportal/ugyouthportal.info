@@ -1,0 +1,5 @@
+name = "UG Youth Portal Module"
+description = "A sitewide module for UG Youth Portal functionality"
+package = "UG Youth Portal"
+core = "7.x"
+dependencies[] = nodequeue 

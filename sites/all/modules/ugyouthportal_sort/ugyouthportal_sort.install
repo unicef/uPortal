@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function ugyouthportal_sort_schema() {
+  $schema['ugyouthportal_sort'] = array(
+    'fields' => array(
+      'uportal_sort_nid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+        'description' => 'Node {node}.nid.',
+      ),
+      'uportal_sort_posn' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => 0,
+        'description' => 'Content sort position',
+      ),
+    ),
+    'primary key' => array('uportal_sort_nid'),
+		'indexes' => array (
+			'uportal_sort_nid' => array('uportal_sort_nid'),
+			'uportal_sort_posn' => array('uportal_sort_posn'),
+		),
+  );
+   
+  return $schema;
+}
+

@@ -1,0 +1,4 @@
+name = "uPortal Backend Module"
+description = "A module for uPortal backend functionality"
+package = "UG Youth Portal"
+core = "7.x"

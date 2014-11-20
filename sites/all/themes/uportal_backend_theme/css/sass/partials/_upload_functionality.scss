@@ -1,0 +1,228 @@
+
+/** page header and other global styles ***************************************************/
+body.bulk-upload-active {
+	.full-page-wrapper {
+		padding-bottom: 50px;
+	}
+	h1 {
+		background-image: url("../../images/heading-upload-bg.png");
+	}
+	.header-upload-btn {
+		cursor: pointer;
+		float: right;
+		width: 105px;
+		@include border-radius(6px);
+		color: #fff;
+		background: #2c3e50;
+		text-align: center;
+		font-size: 12px;
+		height: 27px;
+		line-height: 27px;
+		margin-top: 19px;
+	}
+	.page-content-centred-strip {
+		width: auto;
+	}
+}
+
+/** uploader file input ***************************************************/
+input#fileupload {
+	position: absolute;
+	@include opacity(0);
+	width: 0; height: 0;
+}
+
+/** uploader button ***************************************************/
+#bulk-uploader-btn {
+	text-transform: none;
+	width: 105px;
+	float: right;
+	line-height: 28px; height: 28px;
+	margin-top: 12px;
+	@include ems_font_size(13px, $body-font-size);
+	font-weight: bold;
+	&:hover {
+		background-color: #0e1b28;
+	}
+	body.perm-disallowed-edit-content &,
+	body.perm-disallowed-edit-content &:hover {
+		cursor: default;
+		background-color: #434f5b;
+		@include opacity(0.9);
+	}
+}
+
+
+/** format guidelines ***************************************************/
+#uportal-bulk-uploader {
+    display: none;
+	.uploader-guidelines {
+		float: right;
+		width: 380px;
+		padding: 35px 30px 35px 0;
+		h2 {
+			color: #333;
+			@include ems_font_size(16px, $body-font-size);
+			padding: 0 0 25px;
+			&.heading-2 {
+				padding: 30px 0 25px;
+			}
+		}
+		h3 {
+			color: #2c3e50;
+			@include ems_font_size(16px, $body-font-size);
+			font-weight: 700;
+		}
+		strong {
+			color: #333;
+			font-weight: 700;
+		}
+		.type {
+			padding-left: 44px;
+			margin-top: 15px;
+		}
+		.video-type {
+			background: url("../../images/youthportal_video.png") no-repeat;
+			margin-top: 0;
+			
+		}
+		.audio-type {
+			background: url("../../images/youthportal_audio.png") no-repeat;
+		}
+		.document-type {
+			background: url("../../images/youthportal_document.png") no-repeat;
+		}
+	}
+	.uploader-title-content {
+		background: #fff url("../../images/border-uploader.png") repeat-y 500px 0;
+		border: solid 1px #999;
+		margin: 15px auto 60px;
+		width: 945px;
+	}
+	.title-bar {
+		line-height: 72px;
+		color: #fff;
+		text-align: center;
+		background: #999;
+		@include ems_font_size(18px, $body-font-size);
+		font-weight: bold;
+		@include single-transition(background-color);
+		&.bulk-upload-node-created {
+			background: #009900;
+		}
+	}
+	#uploader-progress {
+		float: left;
+		width: 450px;
+		padding: 35px 0 5px 25px;
+	}
+}
+.uploader-footer {
+	background: #ccc;
+	padding: 8px 0;
+	@include ems_font_size(13px, 16px);
+	&.sticky-footer {
+		position: fixed;
+        width: 100%;
+		z-index: 10;
+        bottom: 0;
+	}
+	.btn {
+		text-align: center;
+		line-height: 25px;
+		@include border-radius(5px);
+	}
+	.cancel-button {
+		float: left;
+		width: 81px;
+		color: #2c3e50;
+		border: 1px solid #2c3e50;
+		background: #eee;
+		cursor: pointer;
+	}
+	.edit-content-button {
+		float: right;
+		width: 105px;
+		background: #2c3e50;
+		color: #fff;
+		cursor: pointer;
+	}
+	.btn.disabled {
+		cursor: default;
+		@include opacity(0.6);
+	}
+}
+
+
+/*** uploader progress *********************/
+#uploader-progress {
+	.file {
+		margin: 0 0 30px;
+	}
+	.icon {
+		//background: url("../../images/uploader-icons.png") no-repeat 0 0;
+		background: url("../../images/loader-green-28x28.gif") no-repeat 0 0;
+		float: left;
+		width: 28px; height: 30px;
+		margin: 0 8px 0 0;
+	}
+	.title-wrapper {
+		float: left;
+		color: #333;
+		width: 380px;
+		font-weight: bold;
+		line-height: 1em;
+	}
+	.title {
+		margin-bottom: 5px;
+	}
+	#progress-bar-wrapper {
+		background: #bababa;
+		padding: 4px;
+		div {
+			height: 8px;
+			width: 0;
+			background: #666;
+			@include single-transition(width);
+		}
+	}
+	.bulk-upload-node-created {
+		.icon {
+		    background: url("../../images/uploader-icons.png") no-repeat 0 -30px;
+		}
+		#progress-bar-wrapper div {
+			background: #009900;
+		}
+	}
+	.bulk-upload-finished {
+		.icon {
+			background: url("../../images/loader-green-28x28.gif") no-repeat 0 0;
+		}
+		#progress-bar-wrapper div {
+			background: #255f25;
+		}
+	}
+	.error-msg {
+		display: none;
+		@include ems_font_size(12px, $body-font-size);
+		color: #ff224e;
+	}
+	.bulk-upload-cancelled-upload {
+		.icon {
+			background-position: 0 -60px;
+		}
+		#progress-bar-wrapper {
+			display: none;
+		}
+		.upload-cancelled {
+			display: block;
+		}
+	}
+	#cancel-btn {
+		float: right;
+		width: 15px; height: 15px;
+		cursor: pointer;
+		margin-top: 21px;
+		background: url("../../images/uploader-icons.png") no-repeat 0 -90px;
+	}
+}

@@ -1,0 +1,25 @@
+
+header.page-header {
+	position: fixed;
+	width: 100%;
+	z-index: 10;
+}
+
+.header-strip-1 {
+	background: #3497db none;
+	height: 52px;
+	.h1-wrapper {
+		float: left;
+		width: 430px;
+	}
+	.col-2-header {
+		float: right;
+		width: 500px;
+	}
+}
+
+.header-strip-2 {
+	background: #fff;
+	border-bottom: solid 1px #999;
+	height: 42px;
+}

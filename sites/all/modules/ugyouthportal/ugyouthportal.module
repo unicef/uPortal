@@ -1,0 +1,1213 @@
+<?php
+
+/**
+ * Ensure that this module's weight is greater than pubdlcnt
+ * for proper download stats
+ */
+
+
+global $ugyouthportal_data;
+$ugyouthportal_data['no_per_listing_page'] = 20;
+$ugyouthportal_data['body_classes'] = array();
+$ugyouthportal_data['empty_callbacks'] = array (
+	array( 'url'=>'home', 'title'=>'Welcome', 'description'=>'Welcome' ),
+	array( 'url'=>'download', 'title'=>'Download', 'description'=>'Download' ),
+);
+$ugyouthportal_data['nodequeue_defns'] = array (
+	'topic' => array (
+		'parent-queue-for-type' => TRUE,
+		'child-queue-for-type' => FALSE,
+		'parents' => array(),
+		'children' => array(),
+	),
+	'lesson_plan' => array (
+		'parent-queue-for-type' => TRUE,
+		'child-queue-for-type' => TRUE,
+		'parents' => array(),
+		'children' => array (
+			'video' => 'field_lesson_plan_reference',
+			'document' => 'field_lesson_plan_reference',
+			'audio' => 'field_lesson_plan_reference',
+		),
+	),
+	'series' => array (
+		'parent-queue-for-type' => FALSE,
+		'child-queue-for-type' => TRUE,
+		'parents' => array(),
+		'children' => array (
+			'video' => 'field_series_reference',
+			'document' => 'field_series_reference',
+			'audio' => 'field_series_reference',
+		),
+	),
+);
+
+
+/**
+ * implementing hook_hook_info
+ *  - showing Drupal where to find the other hooks
+ */
+function ugyouthportal_hook_info() {
+	$hooks = array();
+	static $uportal_hooks = array (
+		'nodequeue' => array(),
+		'block'	=>	array('block_info', 'block_view',),
+	);
+	foreach ($uportal_hooks as $group => $hooks_array) {
+		foreach ($hooks_array as $hook) {
+			$hooks[$hook] = array('group' => $group);
+		}
+	}
+	return $hooks;
+}
+/** END ************************/
+
+
+/**
+ * implement hook_menu
+ */
+function ugyouthportal_menu() {
+	global $ugyouthportal_data;
+	$items = array();
+	
+	//empty callbacks
+	foreach ($ugyouthportal_data['empty_callbacks'] as $callback) {
+		$items[$callback['url']] = array (
+			'title' => $callback['title'],
+			'description' => $callback['description'],
+			'page callback' => 'ugyouthportal_empty_content',
+			'access arguments' => array('access content'),
+			'type' => MENU_CALLBACK
+		);
+	}
+	
+	//menu items
+	$items['admin/content/uportal-bulk-update-queue'] = array (
+		'title'							=> 	'Update nodequeue information for all content',
+		'description'				=> 	'Update nodequeue information for all content',
+		'page callback'			=>	'ugyouthportal_bulk_update_queue',
+		'page arguments'		=>	array(),
+		'access arguments'	=>	array('administer nodes'),
+		'type'							=>	MENU_NORMAL_ITEM,
+		'file'							=>	'ugyouthportal.nodequeue.inc',
+	);
+	$items['view/%/%'] = array (
+		'page callback'			=>	'ugyouthportal_redirect_to_content',
+		'page arguments'		=>	array(1,2),
+		'access arguments'	=>	array('access content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'ugyouthportal.admin.inc',
+	);
+	$items['category/%node/%/%/%'] = array (
+		'page callback'			=>	'ugyouthportal_get_category_page',
+		'page arguments'		=>	array(1,2,3,4),
+		'access arguments'	=>	array('access content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'ugyouthportal.admin.inc',
+	);
+	$items['welcome-uportal'] = array (
+		'title'							=>	'Welcome to the uPortal',
+		'page callback'			=>	'ugyouthportal_get_home_page',
+		'page arguments'		=>	array(),
+		'access arguments'	=>	array('access content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'ugyouthportal.admin.inc',
+	);
+	$items['content-index/%/%/%/%/%'] = array (
+		'title'							=>	'Content Index',
+		'page callback'			=>	'ugyouthportal_get_index_page',
+		'page arguments'		=>	array(1),
+		'access arguments'	=>	array('access content'),
+		'type'							=>	MENU_CALLBACK,
+		'file'							=>	'ugyouthportal.index_page.inc',
+	);
+	$items['uportal/recommend-content/nojs/%'] = array(
+    'title' => 'Recommend Content',
+    'page callback' => 'ugyouthportal_recommend_content',
+		'page arguments' => array(2,3),
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+	$items['uportal/recommend-content/ajax/%'] = array(
+    'delivery callback' => 'ajax_deliver',
+  ) + $items['uportal/recommend-content/nojs/%'];
+	
+	return $items;
+}
+/** END ************************/
+
+
+/**
+ * get language from path
+ */
+function ugyouthportal_url_inbound_alter(&$internal_path, $alias_path, $path_language) {
+	$languages = locale_language_list('name');
+	$original_path = $alias_path;
+	$path_parts = explode('/', $original_path);
+	$path_parts_no = count($path_parts);
+	
+	//language path
+	//language code can be 3 or 2 depending on if content is in series
+	if ($path_parts_no>=4 && (isset($languages[$path_parts[3]]) || isset($languages[$path_parts[2]]))) { 
+		if (isset($languages[$path_parts[3]])) $path_language = $path_parts[3];
+		if (isset($languages[$path_parts[2]])) $path_language = $path_parts[2];
+		$internal_path = drupal_lookup_path('source', $alias_path, $path_language);
+	}
+	
+	//download path
+	if ($path_parts[$path_parts_no-1]=='download') {
+		unset($path_parts[$path_parts_no-1]);
+		
+		//check for non-aliased path
+		if ($path_parts[0]=='node' && is_numeric($path_parts[1])) {
+			$internal_path = implode('/', $path_parts);
+			$internal_path_parts = $path_parts;
+		} else {
+			$alias_path = implode('/', $path_parts);
+			$internal_path = drupal_lookup_path('source', $alias_path, $path_language);
+			$internal_path_parts = explode('/', $internal_path);
+		}
+		
+		//download file
+		if (count($internal_path_parts)==2 && $internal_path_parts[0]=='node' && is_numeric($internal_path_parts[1])) {
+			$nid = $internal_path_parts[1];
+			module_load_include('inc', 'ugyouthportal', 'ugyouthportal.download_file');
+			_ugyouthportal_download_file($nid);
+		}
+	}
+	
+}
+/** END ************************/
+
+
+/**
+ * return empty content
+ */
+function ugyouthportal_empty_content() {
+	return '';
+}
+/** END ************************/
+
+
+/**
+ * recommend content
+ */
+function ugyouthportal_recommend_content($ajax, $nid) {
+	$is_ajax_mode = $ajax == 'ajax';
+	
+	/*
+	if (empty($_GET['tok']) || !drupal_valid_token($_GET['tok'], 'recommend_content' . $nid)) {
+		drupal_set_message(t('Invalid security token. Please try again.'), 'error');
+    drupal_goto('node/'.$nid);
+		return;
+  }
+  */
+	
+	$queue = nodequeue_load_queue_by_name('user_recommended_content');
+	$subqueue = current(nodequeue_load_subqueues_by_queue($queue->qid));
+	$sqid = $subqueue->sqid;
+	$last_node = nodequeue_load_back($sqid);
+	nodequeue_subqueue_remove_node($sqid, $last_node->nid);
+	nodequeue_subqueue_add($queue, $subqueue, $nid);
+	
+	if ($is_ajax_mode) {
+		$commands = array(
+			ajax_command_invoke(NULL, 'finished_recommending_content', array())
+		);
+		return array (
+			'#type' => 'ajax',
+			'#commands' => $commands,
+		);
+	} else {
+		drupal_set_message(t('This content has been pushed to the front page.'));
+    drupal_goto('node/'.$nid);
+	}
+}
+/** END ************************/
+
+
+/**
+ * implement nodequeue_nodequeue_add so as to move most recently added up to the top
+ */
+function ugyouthportal_nodequeue_add($sqid, $nid) {
+	//user recommended content subqueue id is 25
+	if ($sqid == 25) {
+		$subqueue = subqueue_load($sqid);
+		nodequeue_queue_front($subqueue, $subqueue->count);
+	}
+}
+/** END ************************/
+
+
+/**
+ * preprocess page
+ */
+function ugyouthportal_preprocess_html(&$vars) {
+	global $ugyouthportal_data;
+	foreach ($ugyouthportal_data['body_classes'] as $body_class) {
+		$vars['classes_array'][] = $body_class;
+	}
+}
+/** END ************************/
+
+
+
+/**
+ * redirect to user/login
+ */
+function ugyouthportal_init() {
+	global $user;
+	if ($_GET['q']=='user' && $user->uid<1) {
+		drupal_goto('user/login');
+	}
+}
+/** END ************************/
+
+
+/**
+ * modify administration menu
+ * see: http://drupal.org/node/502500 for details: #13 and #149
+ */
+function ugyouthportal_admin_menu_output_alter(&$content) {
+  // Add a top level item for the Create content menu itself.
+  $content['tentensites'] = array(
+    '#theme' => 'admin_menu_links',
+    '#weight' => -99,
+    '#sorted' => TRUE,
+  );
+
+  // Copy the create content submenu to our backend menu.
+  $content['tentensites']['create-content'] = array(
+    '#title' => t('Create content'),
+    '#href' => 'node/add',
+    '#weight' => -10,
+  );
+
+  foreach (node_type_get_types() as $type => $object) {
+    if (node_access('create', $type)) {
+      $node_type_url = str_replace('_', '-', $type);
+      $content['tentensites']['create-content'][$node_type_url] = array (
+        '#title' => $object->name,
+        '#href' => 'node/add/'. $node_type_url,
+      );
+    }
+  }
+	
+	// Remove "Tasks" and "Index" from Admin Menu output
+  $admin_menu_exclusions = array(
+    t('Tasks'),
+  );
+	
+	foreach($content['menu'] as $menu_key => $menu_tree) {
+    if (isset($menu_tree['#title']) && in_array($menu_tree['#title'], $admin_menu_exclusions))
+      unset($content['menu'][$menu_key]);
+  }
+	
+	//sort create content links
+  if (!empty($content['tentensites']['create-content'])) {
+    uasort($content['tentensites']['create-content'], '_ugyouthportal_element_sort');
+  }
+}
+/** END ************************/
+
+
+/**
+ * sorter: mainly for admin links
+ */
+function _ugyouthportal_element_sort($a, $b) {
+  $a_title = (is_array($a) && isset($a['#title'])) ? $a['#title'] : '';
+  $b_title = (is_array($b) && isset($b['#title'])) ? $b['#title'] : '';
+  return strcasecmp($a_title, $b_title);
+}
+/** END ************************/
+
+
+
+/**
+ * implement node_insert
+ * 	- node queue data
+ * 	- file size and duration
+ */
+function ugyouthportal_node_insert($node) {
+	module_load_include('pathauto.inc', 'ugyouthportal');
+	module_load_include('nodequeue.inc', 'ugyouthportal');
+	_ugyouthportal_update_node_queue_data($node, 'insert');
+	_ugyouthportal_create_file_size_data($node);
+	_ugyouthportal_create_alias($node, 'insert');
+	/*
+	if (function_exists('views_invalidate_cache')) {
+    views_invalidate_cache();
+  }
+  */
+}
+/** END ************************/
+
+
+/**
+ * implement hook_node_update
+ */
+function ugyouthportal_node_update($node) {
+	module_load_include('pathauto.inc', 'ugyouthportal');
+	module_load_include('nodequeue.inc', 'ugyouthportal');
+	_ugyouthportal_update_node_queue_data($node, 'update');
+	_ugyouthportal_create_file_size_data($node);
+	_ugyouthportal_create_alias($node, 'update');
+}
+/** END ************************/
+
+
+/**
+ * implement hook_node_view
+ */
+function ugyouthportal_node_view($node, $view_mode, $langcode) {
+	$content_types = array( 'document'=>1, 'video'=>1, 'audio'=>1, );
+	if (isset($content_types[$node->type]) && $view_mode=='full') {
+		drupal_add_library('system', 'drupal.ajax'); //load drupal core ajax library
+		drupal_add_js(
+			array(
+				'ugyouthportal' => array(
+					'nid' => $node->nid,
+					'node_type' => $node->type,
+					'theme_path' => '/'.drupal_get_path('theme', 'ugyouthportal_theme'),
+				)
+			),
+		'setting'
+		);
+	}
+}
+/** END ************************/
+
+
+/**
+ * implement hook_node_view_alter
+ *
+ */
+function ugyouthportal_node_view_alter(&$build) {
+
+  $nodetype = $build['#node']->type;
+  $supported_nodetypes = variable_get('pubdlcnt_supported_nodetypes', array());
+
+  $num_supported_nodetypes = 0;
+  foreach ($supported_nodetypes as $type => $value) {
+    if ($value != 0) {
+      $num_supported_nodetypes++;
+    }
+  }
+
+  if (!$num_supported_nodetypes || !empty($supported_nodetypes[$nodetype])) {
+    if($build['#view_mode'] == 'full' || $build['#view_mode'] == 'teaser') {
+      // we count only the download for the full/teaser mode of the supported node types.
+      $build['#post_render'][] = 'ugyouthportal_pubdlcnt_post_render';
+    }
+  }
+}
+/** ENDS *****************************************/
+
+
+/**
+ * render node content to insert download count links
+ */
+function ugyouthportal_pubdlcnt_post_render($html, $build) {
+	
+	$html = str_replace(
+		'modules/pubdlcnt/pubdlcnt.php',
+		'modules/ugyouthportal/ugyouthportal.pubdlcnt.php',
+		$html
+	);
+  return $html;
+
+}
+/** ENDS *****************************************/
+
+
+/**
+ * implement node_delete
+ *
+ * nodequeue module handles this hook to delete content from queues
+ * This hook is implemented to remove subqueues owned by nodes
+ * e.g. on deleting a topic, also delete its subqueue
+ * 
+ */
+function ugyouthportal_node_delete($node) {
+	module_load_include('nodequeue.inc', 'ugyouthportal');
+	_ugyouthportal_update_node_queue_data($node, 'delete');
+}
+/** END ************************/
+
+
+/**
+ * update file size data
+ */
+function _ugyouthportal_create_file_size_data($node) {
+	//update duration for video and audio
+	//update number of pages for document
+	
+	$file_path = false;
+	switch ($node->type) {
+		case 'video':
+			$video_field_language = field_language('node', $node, 'field_video');
+			$file = file_load($node->field_video[$video_field_language][0]['fid']);
+			$file_path = drupal_realpath($file->uri);
+			break;
+		case 'audio':
+			$audio_track_field_language = field_language('node', $node, 'field_audio_track');
+			$file = file_load($node->field_audio_track[$audio_track_field_language][0]['fid']);
+			$file_path = drupal_realpath($file->uri);
+			break;
+		case 'document':
+			$pdf_field_language = field_language('node', $node, 'field_pdf_file');
+			$file = file_load($node->field_pdf_file[$pdf_field_language][0]['fid']);
+			$file_path = drupal_realpath($file->uri);
+			break;
+	}
+	
+	if ($file_path) {
+		$node->original = isset($node->original) ? $node->original : NULL;
+		$file_size_field_language = field_language('node', $node, 'field_file_size_duration');
+		$node->field_file_size_duration[$file_size_field_language][0]['value'] = _ugyouthportal_get_node_media_size($file_path, $node->type);
+		field_attach_update('node', $node);
+	}
+
+}
+/** END ************************/
+
+/**
+ * make search form for index page
+ */
+function ugyouthportal_index_search_form($form, &$form_state) {
+	$form['search_field'] = array (
+		'#type' => 'textfield',
+		//'#required' => TRUE,
+		'#attributes' =>array(
+			'placeholder' => t('Search for content'),
+			'value' => (isset($_SESSION['uportal_index_search_term']) && $_SESSION['uportal_index_search_term']) ? $_SESSION['uportal_index_search_term'] : '',
+		),
+		//'#title' => "", //no label
+		//'#description' => '', //no description
+	);
+	$form['submit'] = array (
+		'#type' => 'submit',
+		'#value' => 'Search',
+	);
+	return $form;
+}
+/** END ************************/
+
+
+/**
+ * submit function for search form
+ */
+function ugyouthportal_index_search_form_submit($form, &$form_state) {
+	module_load_include('index_page.inc', 'ugyouthportal');
+	$search_term = $form_state['values']['search_field'];
+	
+	//check for existence of words
+	if ($search_term=='' || ctype_space($search_term)) { //either empty or full of whitespace
+		//kill search
+		$all_url = _ugyouthportal_get_url(array(), array('killsearch'=>1), 'all');
+	} else {
+		$_SESSION['uportal_index_search_term'] = $search_term;
+		$all_url = _ugyouthportal_get_url(array(), array(), 'all');
+	}
+	
+	//$form_state['redirect'] = array($all_url['url'], $all_url['options']);
+	drupal_goto($all_url['url'], $all_url['options']);
+}
+/** END ************************/
+
+
+/**
+ * implement form alter
+ */
+function ugyouthportal_form_alter(&$form, &$form_state, $form_id) {
+	
+	//dsm($form);
+	if ($form['#id']=='comment-form') {
+		$form['actions']['submit']['#value'] = t('Post Comment');
+		$form['#validate'][] = 'ugyouthportal_validate_comments';
+		//dsm($form);
+	}
+	
+	/*
+	if ($form['#id']=='ugyouthportal-index-search-form') {
+		$form['#submit'][] = 'ugyouthportal_index_search_form_submit_no2';
+	}
+	*/
+	
+	/****
+	 * TODO
+	 *
+	 * filtering boxes not working well with ajax file uploading
+	 * it resets on upload
+	 */
+	
+	if (false && isset($form['field_topic_reference']) && isset($form['field_topic_reference']['#language']) && isset($form['field_topic_reference'][$form['field_topic_reference']['#language']]) && isset($form['field_series_reference'][$form['field_series_reference']['#language']])) {
+		//adjust sub topic reference select field
+		$topics_and_series = views_get_view_result('utilities', 'block_1');
+		
+		$options_attributes = array(
+			'_none' => array('class' => '_none'),
+		);
+		if (count($form['field_topic_reference'][$form['field_topic_reference']['#language']]['#options'])) {
+			foreach ($form['field_topic_reference'][$form['field_topic_reference']['#language']]['#options'] as $key=>$value) {
+				$options_attributes['_none']['class'] .= ' '.$key;
+			}
+		}
+		
+		//dsm($topics_and_series);
+		
+		foreach ($topics_and_series as $topic_series) {
+			$options_attributes[$topic_series->nid] = array('class' => $topic_series->node_field_data_field_topic_reference_nid); //series_nid => array('class' => topic_nid)
+		}
+		$form['field_series_reference'][$form['field_series_reference']['#language']]['#options_attributes'] = $options_attributes;
+		$form['field_series_reference'][$form['field_series_reference']['#language']]['#chained_selects'] = array(
+			'parent' => 'edit-field-topic-reference-'.$form['field_topic_reference']['#language'],
+			'child'  => 'edit-field-series-reference-'.$form['field_series_reference']['#language'],
+		);
+	}
+	
+	//dsm(get_defined_vars());
+	
+}
+/** END ************************/
+
+
+/**
+ * return content meta info i.e. comments, playlist, related
+ */
+function _ugyouthportal_get_content_meta_info($node_content, $node) {
+	
+	//dsm($node_content);
+	//dsm($node);
+	
+	//series info
+	$series_info = _ugyouthportal_get_node_series_content($node);
+	
+	//comments
+	$comment_info = array (
+		'comments_html' => render($node_content['comments']),
+		'comment_count' => $node->comment_count,
+	);
+	
+	//related content - wikipedia
+	$related_info = false;
+	/*
+	if (isset($node_content['field_url']['#items']) && count($node_content['field_url']['#items'])) {
+		$wikipedia_str = '<span class="wikipedia-content clearfix">';
+		$wikipedia_str .= '<span class="img">'.render($node_content['field_wikipedia_article_image']).'</span>';
+		$wikipedia_str .= '<span class="desc">';
+		$wikipedia_str .= '<span class="title">'.render($node_content['field_wikipedia_article_title']).'</span>';
+		$wikipedia_str .= '<span class="body">'.render($node_content['field_wikipedia_article_body']).'</span>';
+		$wikipedia_str .= '</span></span>';
+		$wikipedia_str_linked = '<h2>On Wikipedia</h2>'.l($wikipedia_str, $node_content['field_url']['#items'][0]['safe_value'], array (
+			'attributes' => array (
+				'title'	=>	'Read on Wikipedia: '.$node_content['field_wikipedia_article_title']['#items'][0]['safe_value'],
+			),
+			'html'	=> true,
+		));
+		$related_info = array (
+			'link_count' => 1, //only wikipedia
+			'wikipedia_str' => $wikipedia_str_linked, 
+		);
+	}
+	*/
+	
+	
+	//make navigation
+	$meta_info_nav = '<ul class="meta-content-menu">';
+	$related_content_nav = '';
+	
+	//comments navigation
+	$no_comments = $comment_info['comment_count'] . (($comment_info['comment_count']==1) ? ' comment' : ' comments');
+	$meta_info_nav .= '<li class="nav-btn nav-btn-comments nav-btn-first"><a class="btn" href="#comments" title="Check out the comments">Comments <span>('.$no_comments.')</span></a></li>';
+	
+	//playlist navigation
+	if ($series_info) {
+		$no_items = $series_info['playlist-no'] . (($series_info['playlist-no']>1) ? ' items' : ' item');
+		$series_nav_classes = 'nav-btn nav-btn-playlist';
+		if(!$related_info) $series_nav_classes .= ' nav-btn-last';
+		$meta_info_nav .= '<li class="'.$series_nav_classes.'"><a class="btn" href="#playlist" title="View the playlist for this series">Series <span>('.$no_items.')</span></a></li>';
+	}
+	
+	//related content
+	if ($related_info) {
+		$no_related = $related_info['link_count'] . (($related_info['link_count']==1) ? ' link' : ' links');
+		$related_content_nav = '<li class="nav-btn nav-btn-related-content nav-btn-last"><a class="btn" href="#related-info" title="View related content and links">Related ('.$no_related.')</a></li>';		
+	}
+	
+	//finish nav
+	$meta_info_nav .= $related_content_nav.'</ul>';
+	
+	
+	//make content and navigation
+	//$meta_info_content = $meta_info_nav.'<div class="meta-content-wrapper" id="tabs_container">';
+	$meta_info_content = '<div class="meta-content-wrapper clearfix" id="tabs_container">';
+	$meta_info_content .= '<div id="comments" class="tab"><h2 class="tab-title">Comments</h2>'.$comment_info['comments_html'].'</div>';
+	if ($series_info) {
+		$meta_info_content .= '<div id="playlist" class="tab"><h2 class="tab-title">'.$series_info['series-title'].'</h2>'.$series_info['series-list-html'].'</div>';
+	}
+	if ($related_info) {
+		$meta_info_content .= '<div id="related-info" class="only-wikipedia tab">';
+		$meta_info_content .= '<div class="wikipedia-wrapper">'.$related_info['wikipedia_str'].'</div>';
+		$meta_info_content .= '</div>';
+	}
+	$meta_info_content .= '</div>';
+	
+	
+	return array (
+		'content' => $meta_info_content,
+		'nav' => $meta_info_nav,
+		'prev_btn' => $series_info['previous-btn'],
+		'next_btn' => $series_info['next-btn'],
+	);
+}
+/** END ************************/
+
+
+/**
+ * return series content
+ */
+function _ugyouthportal_get_node_series_content($node) {
+	
+	global $user;
+	
+	//dsm($node);
+	
+	$language_index = isset($node->language) ? $node->language : 'und';
+	$topic_language_index = 'und';
+	$series_language_index = 'und';
+	$in_series = (count($node->field_series_reference) && isset($node->field_series_reference[$series_language_index]) && count($node->field_series_reference[$series_language_index]));
+	$topic_nid = $node->field_topic_reference[$topic_language_index][0]['target_id'];
+	$topic_title = $node->field_topic_reference[$topic_language_index][0]['entity']->title;
+	$topic_link = l($topic_title, 'category/'.$topic_nid.'/all/all/all', array(
+  	'attributes' => array (
+  		'title'	=>	t('See more content in ').$topic_title,
+  	),
+  	'html'	=> false,
+  ));
+	$series_footer = '<div class="series-footer">'.t('See more content in ').$topic_link.'</div>';
+	
+	$previous_btn = false;
+	$next_btn = false;
+	$playlist_no = 0;
+	
+	if (isset($_GET['from']) && $_GET['from']=='lesson-plan' && isset($_GET['from-nid']) && is_numeric($_GET['from-nid'])) {
+		$lesson_plan_nid = $_GET['from-nid'];
+		if (user_is_logged_in()) {
+			$series_content = views_get_view_result('series', 'block_3', $lesson_plan_nid);
+		} else {
+			$series_content = views_get_view_result('series', 'block_2', $lesson_plan_nid);
+		}
+		$series_content = _ugyouthportal_clean_up_repeated_results_from_series($series_content);
+		$playlist_no = count($series_content);
+		
+		//get lesson plan title
+		$lesson_plan_title = '';
+		$related_lesson_plans = $node->field_lesson_plan_reference[$series_language_index];
+		foreach ($related_lesson_plans as $related_lesson_plan) {
+			if ($related_lesson_plan['target_id']==$lesson_plan_nid) {
+				$lesson_plan_title = $related_lesson_plan['entity']->title;
+				break;
+			}
+		}
+		
+		$series_title = 'Lesson Plan: '.$lesson_plan_title.' ('.$playlist_no.' items)';
+		$series_content_str = '<ul class="series-content-wrapper series-playlist lesson-plan-content-wrapper">';
+	} elseif ($in_series) { //has a playlist
+		$series_nid = $node->field_series_reference[$series_language_index][0]['target_id'];
+		if (user_is_logged_in()) {
+			$series_content = views_get_view_result('series', 'block_4', $series_nid);
+		} else {
+			$series_content = views_get_view_result('series', 'block_0', $series_nid);
+		}
+		$series_content = _ugyouthportal_clean_up_repeated_results_from_series($series_content);
+		$playlist_no = count($series_content);
+		$series_title = 'Series: '.$node->field_series_reference[$series_language_index][0]['entity']->title.' ('.$playlist_no.' items)';
+		$series_content_str = '<ul class="series-content-wrapper series-playlist">';
+	} else {
+		if (user_is_logged_in()) {
+			$series_content = views_get_view_result('series', 'block_5', $topic_nid);
+		} else {
+			$series_content = views_get_view_result('series', 'block_1', $topic_nid);
+		}
+		$series_content = _ugyouthportal_clean_up_repeated_results_from_series($series_content);
+		$playlist_no = count($series_content);
+		$series_title = t('Related content in ').$topic_link;
+		$series_content_str = '<ul class="series-content-wrapper related-content">';
+	}
+	
+	//dsm($node);
+	//dsm($series_content);
+	
+	for ($i=0; $i<$playlist_no; $i++) {
+		$series_item = $series_content[$i];
+		
+		//css classes
+		$item_class_str = 'series-item series-item-type-'.$series_item->node_type.' series-item-no-'.$i;
+		if ($i == 0) $item_class_str .= ' series-item-first';
+		if ($i == $playlist_no-1) $item_class_str .= ' series-item-last';
+		
+		//add after and before active class
+		if ($in_series && $i>0 && $_GET['q'] == 'node/'.$series_content[$i-1]->nid) {
+			$item_class_str .= ' series-item-after-active';
+		}
+		if ($in_series && $i<$playlist_no-1 && $_GET['q'] == 'node/'.$series_content[$i+1]->nid) {
+			$item_class_str .= ' series-item-before-active';
+		}
+		
+		//get active page
+		if ($_GET['q'] == 'node/'.$series_item->nid) {
+			$item_class_str .= ' series-item-active';
+			if ($in_series && $i-1 >= 0) {
+				$previous_btn = l('<span></span>', 'node/'.$series_content[$i-1]->nid, array(
+					'attributes' => array (
+						'title'	=>	'Click to view previous item: '.$series_content[$i-1]->node_title,
+					),
+					'html'	=> true,
+				));
+			}
+			if ($in_series && $i+1 < $playlist_no) {
+				$next_btn = l('<span></span>', 'node/'.$series_content[$i+1]->nid, array(
+					'attributes' => array (
+						'title'	=>	'Click to view next item: '.$series_content[$i+1]->node_title,
+					),
+					'html'	=> true,
+				));
+			}
+		}
+		
+		//series content item data
+		if ($series_item->node_type=='video') {
+			if (isset($series_item->field_field_image[0]['raw']['is_default']) && $series_item->field_field_image[0]['raw']['is_default'] && isset($series_item->field_field_video) && $series_item->field_field_video[0]['rendered']) {
+				$img = render($series_item->field_field_video[0]['rendered']);
+			} else {
+				$img = render($series_item->field_field_image[0]['rendered']);
+			}
+		} else {
+			$img = render($series_item->field_field_image[0]['rendered']);
+		}
+		//$txt = '<span class="title">'.$series_item->node_title.'</span><span class="body">'.render($series_item->field_body[0]['rendered']).'</span>';
+		$txt = '<span class="title">'.$series_item->node_title.'</span>';
+		$size = $series_item->field_field_file_size_duration[0]['rendered']['#markup'];
+		//$size = _ugyouthportal_get_node_media_size($series_item->_field_data['nid']['entity']);
+		
+		$languages = locale_language_list('name');
+		$language_code = $series_item->node_language=='und' ? 'en' : $series_item->node_language;
+		$language = $languages[$language_code];
+		
+		//build series content item
+		$series_item_str = '<span class="series-item-content">';
+		$series_item_str .= '<span class="counter-no">'.($i+1).'</span>';
+		$series_item_str .= '<span class="content-wrapper clearfix">';
+		$series_item_str .= '<span class="img">'.$img.'<span class="icon"></span></span>';
+		$series_item_str .= '<span class="txt">'.$txt;
+		$series_item_str .= '<span class="size-language"><span class="size">'.$size.'</span><span class="language">'.$language.'</span></span></span>';
+		$series_item_str .= '</span></span>';
+		
+		//link series content item
+		$link_path = drupal_get_path_alias('node/'.$series_item->nid, $language_code);
+		if (isset($_GET['from']) && $_GET['from']=='lesson-plan' && isset($_GET['from-nid']) && is_numeric($_GET['from-nid'])) {
+			$link_path .= '?from=lesson-plan&from-nid='.$_GET['from-nid'];
+		}
+		$series_item_str_linked = '<a href="/'.$link_path.'" title="'.$series_item->node_title.'">'.$series_item_str.'</a>';
+		
+		$series_content_str .= '<li class="'.$item_class_str.'">'.$series_item_str_linked.'</li>';
+	}
+
+	$series_content_str .= '</ul>';
+	$series_content_str .= $series_footer;
+	
+	return array (
+		'series-list-html' => $series_content_str,
+		'series-title' => $series_title,
+		'playlist-no' => $playlist_no,
+		'previous-btn' => $previous_btn,
+		'next-btn' => $next_btn,
+	);
+}
+/** END ************************/
+
+	
+/**
+ *
+ * TODO
+ * 
+ * this is a dirty hack for repeated results from the Views SQL query which needs to be properly modified to avoid repeated results
+ *
+ * I suspect the NODEQUEUE join to be the culprit - no investigation carried out
+ *
+ */
+function _ugyouthportal_clean_up_repeated_results_from_series($series_content) {
+	$unique_nids = array();
+	$unique_results = array();
+	foreach ($series_content as $series_item) {
+		$item_nid = $series_item->nid;
+		if (!isset($unique_nids['nid-'.$item_nid])) {
+			$unique_nids['nid-'.$item_nid] = 1;
+			$unique_results[] = $series_item;
+		}
+	}
+	return $unique_results;
+}
+/** ENDS *****************************************/
+
+
+/**
+ * return node's media size
+ */
+function _ugyouthportal_get_node_media_size($file, $type) {
+	switch ($type) {
+		case 'video':
+		case 'audio':
+			$fileinfo = getID3_analyze($file);
+			$time_str = isset($fileinfo['playtime_string']) ? $fileinfo['playtime_string'] : '';
+			return $time_str.' mins';
+		case 'document':
+			$pdftext = file_get_contents($file);
+			$no_pages = preg_match_all("/\/Page\W/", $pdftext, $dummy);
+			return $no_pages.' pages';
+	}
+}
+/** END ************************/
+
+
+/**
+ * modify views
+ */
+function ugyouthportal_views_pre_render(&$view) {
+	global $ugyouthportal_data;
+	
+	//add a views class to the body
+	if (strpos($view->current_display, 'page')!==false) {
+		$ugyouthportal_data['body_classes'][] = 'views-'.$view->name.'-'.$view->current_display;
+		if ($view->name=='listing_pages' && $view->current_display=='page_4') {
+			$ugyouthportal_data['body_classes'][] = 'listing-page';
+			$ugyouthportal_data['body_classes'][] = 'isotope-page';
+		}
+	}
+	
+	if ($view->name == 'listing_pages' && $view->current_display=='block_1') {
+		
+		//get and resort results
+		if (isset($_SESSION['uportal_category_content_nids_by_page'])) {
+			$current_page = $_SESSION['current_listing_page_no'];
+			$result_nids = $_SESSION['uportal_category_content_nids_by_page'][$current_page];
+			
+			$sort_by_array = array();
+			foreach ($view->result as $result) {
+				$sort_by_array[] = array_search($result->nid, $result_nids);
+			}
+			array_multisort($sort_by_array, SORT_ASC, $view->result);
+		}
+		
+  }
+	
+}
+
+
+
+function ugyouthportal_views_query_alter(&$view, &$query) {
+	//category page
+	if ($view->name == 'listing_pages' && $view->current_display=='block_1' &&  $query->where) {
+		$nids_by_page = array();
+		$current_page_nids = array();
+		$current_page = 0;
+		
+		if (isset($_SESSION['uportal_category_content_nids_by_page'])) {
+			$nids_by_page = $_SESSION['uportal_category_content_nids_by_page'];
+			if (isset($_GET['page']) && is_numeric($_GET['page']) && isset($nids_by_page[$_GET['page']])) {
+				$current_page = $_GET['page'];
+			}
+			$current_page_nids = $nids_by_page[$current_page];
+			
+			if (count($current_page_nids)) {
+				$query->where[] = array (
+					'conditions' => array(
+						array (
+							'field' => 'node.nid IN(:node_nid)',
+							'value' => array(
+								':node_nid' => $current_page_nids,
+							),
+							'operator' => 'formula',
+						),
+					),
+					'args' => array(),
+					'type' => 'AND',
+				);
+			}
+			
+			$_SESSION['current_listing_page_no'] = $current_page;
+		}
+	}
+
+}
+/** END ************************/
+
+
+function _ugyouthportal_set_listing_pages_special_nids() {
+	//global $ugyouthportal_data;
+	
+	$special_starting_nids = array();
+	$special_starting_nids_by_class = array();
+	
+	//get recommended nids
+	$recommended_nids = _ugyouthportal_sort_algo_get_nids('recommended', $special_starting_nids);
+	$special_starting_nids = array_merge($special_starting_nids, $recommended_nids['nids']);
+	$special_starting_nids_by_class = array_merge($special_starting_nids_by_class, $recommended_nids['nids_by_class']);
+	
+	//get new nids
+	$new_nids = _ugyouthportal_sort_algo_get_nids('new', $special_starting_nids);
+	$special_starting_nids = array_merge($special_starting_nids, $new_nids['nids']);
+	$special_starting_nids_by_class = array_merge($special_starting_nids_by_class, $new_nids['nids_by_class']);
+	
+	//get new and recommended
+	$new_recommended_nids = _ugyouthportal_sort_algo_get_nids('new-recommended', $special_starting_nids);
+	$special_starting_nids_by_class = array_merge($special_starting_nids_by_class, $new_recommended_nids['nids_by_class']);
+	
+	//get commented nids
+	$commented_nids = _ugyouthportal_sort_algo_get_nids('commented', $special_starting_nids);
+	$special_starting_nids = array_merge($special_starting_nids, $commented_nids['nids']);
+	$special_starting_nids_by_class = array_merge($special_starting_nids_by_class, $commented_nids['nids_by_class']);
+	
+	//dsm($special_starting_nids);
+	//dsm($special_starting_nids_by_class);
+	
+	//get viewed nids
+	$viewed_nids = _ugyouthportal_sort_algo_get_nids('viewed', $special_starting_nids);
+	$special_starting_nids = array_merge($special_starting_nids, $viewed_nids['nids']);
+	$special_starting_nids_by_class = array_merge($special_starting_nids_by_class, $viewed_nids['nids_by_class']);
+	
+	//get downloaded nids
+	$downloaded_nids = _ugyouthportal_sort_algo_get_nids('downloaded', $special_starting_nids);
+	$special_starting_nids = array_merge($special_starting_nids, $downloaded_nids['nids']);
+	$special_starting_nids_by_class = array_merge($special_starting_nids_by_class, $downloaded_nids['nids_by_class']);
+	
+	//$ugyouthportal_data['listing_pages_special_nids'] = $special_starting_nids;
+	//$ugyouthportal_data['listing_pages_special_nids_by_class'] = $special_starting_nids_by_class;
+	//variable_set('ugyouthportal_data_listing_pages_special_nids', $special_starting_nids);
+	//variable_set('ugyouthportal_data_listing_pages_special_nids_by_class', $special_starting_nids_by_class);
+	
+	return array(
+		'listing_pages_special_nids' => $special_starting_nids,
+		'listing_pages_special_nids_by_class' => $special_starting_nids_by_class,
+	);
+	
+}
+
+
+function _ugyouthportal_sort_algo_get_nids($type, $exclude_nids) {
+	
+	/**
+	 * using static query building to maximise performance
+	 */
+	
+	$result_nids = array();
+	$result_nids_by_class = array();
+	
+	//get dates
+	$time_month_ago = strtotime('-1 month');
+	
+	//exclude nids
+	$where_clause_exclude_nids = false;
+	if ($exclude_nids && is_array($exclude_nids) && count($exclude_nids)) {
+		$where_clause_exclude_nids = " AND ( (node.nid NOT IN(".implode(',', $exclude_nids).") OR node.nid IS NULL) )";
+	}
+	
+	//where clause
+	$where_clause = "WHERE (node.status = '1') AND (node.type IN  ('audio', 'document', 'video'))";
+	if ($where_clause_exclude_nids && $type!='new-recommended') {
+		$where_clause .= $where_clause_exclude_nids;
+	}
+	
+	//specific type changes
+	switch ($type) {
+		case 'new':
+			$where_clause .= ' AND (node.created > '.$time_month_ago.')';
+			break;
+		case 'recommended':
+			$where_clause .= ' AND (nodequeue_nodes_node.timestamp > '.$time_month_ago.') AND (nodequeue_nodes_node.nid != \'1\')';
+			break;
+		case 'new-recommended':
+			$where_clause .= ' AND (node.created > '.$time_month_ago.') AND (nodequeue_nodes_node.timestamp > '.$time_month_ago.') AND (nodequeue_nodes_node.nid != \'1\')';
+			break;
+		case 'commented':
+			$where_clause .= ' AND (node_comment_statistics.last_comment_timestamp > '.$time_month_ago.') AND (node_comment_statistics.comment_count > 0)';
+			break;
+		case 'viewed':
+			$where_clause .= ' AND (node_counter.timestamp >= '.strtotime('- 2 weeks').')';
+			break;
+		case 'downloaded':
+			$where_clause .= ' AND (pubdlcnt.utime >= '.$time_month_ago.')';
+			break;
+	}
+	
+	//check category page args
+	$join_clause = '';
+	$page_args = arg();
+	if ($page_args[0]=='category' && is_numeric($page_args[1])) {
+		//category filter
+		$category_nid = $page_args[1];
+		$join_clause .= ' LEFT JOIN {field_data_field_topic_reference} field_data_field_topic_reference ON node.nid = field_data_field_topic_reference.entity_id AND (field_data_field_topic_reference.entity_type = \'node\' AND field_data_field_topic_reference.deleted = \'0\') LEFT JOIN {node} node_field_data_field_topic_reference ON field_data_field_topic_reference.field_topic_reference_target_id = node_field_data_field_topic_reference.nid ';
+		$where_clause .= ' AND (node_field_data_field_topic_reference.nid = \''.$category_nid.'\' ) ';
+		
+		//series filter
+		$filter_series_nid = isset($page_args[2]) ? $page_args[2] : FALSE;
+		if ($filter_series_nid && $filter_series_nid!='all' && is_numeric($filter_series_nid)) {
+			$join_clause .= ' LEFT JOIN {field_data_field_series_reference} field_data_field_series_reference ON node.nid = field_data_field_series_reference.entity_id AND (field_data_field_series_reference.entity_type = \'node\' AND field_data_field_series_reference.deleted = \'0\') LEFT JOIN {node} node_field_data_field_series_reference ON field_data_field_series_reference.field_series_reference_target_id = node_field_data_field_series_reference.nid ';
+			$where_clause .= ' AND (node_field_data_field_series_reference.nid = \''.$filter_series_nid.'\' ) ';
+		}
+		
+		//media type filter
+		$filter_media_type = isset($page_args[3]) ? $page_args[3] : FALSE;
+		if ($filter_media_type && $filter_media_type!='all' && in_array($filter_media_type, array('document','audio','video'))) {
+			$where_clause .= ' AND (node.type = \''.$filter_media_type.'\') ';
+		}
+		
+		//language filter
+		$filter_language = isset($page_args[4]) ? $page_args[4] : FALSE;
+		$languages = locale_language_list('name');
+		//dsm($languages);
+		if ($filter_language && $filter_language!='all' && in_array($filter_language, array_keys($languages))) {
+			$where_clause .= ' AND (node.language = \''.$filter_language.'\') ';
+		}
+	}
+
+	
+	$queries = array (
+		'new' => 'SELECT node.nid AS nid, node.created AS node_created, RAND() AS random_field FROM {node} node '.$join_clause.$where_clause.' ORDER BY random_field ASC LIMIT 4 OFFSET 0',
+		
+		'recommended' => 'SELECT node.nid AS nid, node.language AS node_language, nodequeue_nodes_node.position AS nodequeue_nodes_node_position
+FROM {node} node LEFT JOIN {nodequeue_nodes} nodequeue_nodes_node ON node.nid = nodequeue_nodes_node.nid AND nodequeue_nodes_node.qid = \'5\' '.$join_clause.$where_clause.' ORDER BY nodequeue_nodes_node_position ASC LIMIT 4 OFFSET 0',
+		
+		'new-recommended' => 'SELECT node.nid AS nid, node.language AS node_language, nodequeue_nodes_node.position AS nodequeue_nodes_node_position
+FROM {node} node LEFT JOIN {nodequeue_nodes} nodequeue_nodes_node ON node.nid = nodequeue_nodes_node.nid AND nodequeue_nodes_node.qid = \'5\' '.$join_clause.$where_clause.' ORDER BY nodequeue_nodes_node_position ASC LIMIT 4 OFFSET 0',
+
+		'commented' => 'SELECT node.nid AS nid, node_comment_statistics.comment_count AS node_comment_statistics_comment_count FROM {node} node INNER JOIN {node_comment_statistics} node_comment_statistics ON node.nid = node_comment_statistics.nid '.$join_clause.$where_clause.' ORDER BY node_comment_statistics_comment_count DESC LIMIT 4 OFFSET 0',
+		
+		'viewed' => 'SELECT node.nid AS nid, node_counter.totalcount AS node_counter_totalcount FROM {node} node LEFT JOIN {node_counter} node_counter ON node.nid = node_counter.nid '.$join_clause.$where_clause.' ORDER BY node_counter_totalcount DESC LIMIT 4 OFFSET 0',
+		
+		'downloaded' => 'SELECT node.nid AS nid, pubdlcnt.count AS pubdlcnt_count FROM {node} node LEFT JOIN {pubdlcnt} pubdlcnt ON node.nid = pubdlcnt.nid '.$join_clause.$where_clause.' ORDER BY pubdlcnt_count DESC LIMIT 4 OFFSET 0',
+		
+	);
+	
+	$query_results = db_query($queries[$type]);
+	foreach ($query_results as $result) {
+		if (($type=='recommended' || $type=='new-recommended') && in_array($result->nid, $result_nids)) {
+			continue;
+		}
+		$result_nids[] = $result->nid;
+		$result_nids_by_class['nid-'.$result->nid] = $type;
+	}
+	if ($type=='new-recommended') {
+		$result_nids = array();
+	}
+	
+	return array('nids'=>$result_nids, 'nids_by_class'=>$result_nids_by_class,);
+	
+	/***
+	 ** stopped using dynamic query building to maximise performance with a static query
+	 **
+	 ** see:
+	 **
+	 ** https://drupal.org/node/1848348
+	 ** https://api.drupal.org/api/drupal/includes%21database%21select.inc/class/SelectQuery/7
+	 ** http://www.lullabot.com/blog/article/simplify-your-code-drupal-7s-database-api
+	 **
+	 ** 
+	$joined_tables = array(); // element = array('type'=>'leftjoin', 'table'=>'users', 'table_alias'=>'u', 'condition'=>'n.uid = u.uid AND u.uid = :uid', 'condition_values'=>array(':uid' => 5))
+	
+	$query = db_select('node', 'n');
+	if (count($joined_tables)) {
+		
+	}
+	$query = db_select('node', 'n')
+						->fields('n', array('nid'))
+						->condition('n.type', 'article', '=')
+						->range(0, 50);
+	$result = $query->execute();
+	 **
+	 **
+	 */
+}
+
+
+
+/**
+ */
+
+
+/**
+ * customise comment messages
+ */
+function ugyouthportal_validate_comments($form, &$form_state) {
+	
+	//dsm($form_state);
+	
+	// Save errors
+	$form_errors = form_get_errors();
+	$drupal_errors = drupal_get_messages('error');
+
+	// Clear form errors
+	form_clear_error();
+
+	foreach($drupal_errors['error'] as $key => $error) {
+		if (in_array($error, $form_errors)) {
+			// Unset form errors
+			unset($drupal_errors['error'][$key]);
+		}
+	}
+
+	// Rebuild drupal errors
+	foreach($drupal_errors['error'] as $key => $message) {
+			drupal_set_message($message, 'error');
+	}
+
+	if ($form_state['values']['comment_body']['und'][0]['value'] == '') {
+    form_set_error('comment_body', t('You need to enter a comment.'));
+  }
+	if ($form_state['values']['name'] == '') {
+    form_set_error('name', 'You need to enter your name.');
+  }
+}
+/** END ************************/
+
+
+/**
+ * helper function for mime types
+ *
+ * assuming correct extensions
+ */
+function _ugyouthportal_mime_content_type($filename) {
+	
+	$mime_types = array(
+		'ogg' => 'audio/ogg',
+		'oga' => 'audio/ogg',
+		'mp4' => 'video/mp4',
+		'ogv' => 'video/ogg',
+		'm4v' => 'video/x-m4v',
+		'swf' => 'application/x-shockwave-flash',
+		'flv' => 'video/x-flv',
+		'mp3' => 'audio/mpeg3',
+		'qt' => 'video/quicktime',
+		'mov' => 'video/quicktime',
+		'pdf' => 'application/pdf',
+	);
+	
+	$ext = strtolower(array_pop(explode('.',$filename)));
+	if (array_key_exists($ext, $mime_types)) {
+			return $mime_types[$ext];
+	}
+	elseif (function_exists('finfo_open')) {
+			$finfo = finfo_open(FILEINFO_MIME);
+			$mimetype = finfo_file($finfo, $filename);
+			finfo_close($finfo);
+			return $mimetype;
+	}
+	else {
+			return 'application/octet-stream';
+	}
+}
+
+
+
+

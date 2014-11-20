@@ -1,0 +1,4 @@
+name = "uPortal - A New Theme"
+description = "Functionality for the New Theme"
+package = "UG Youth Portal"
+core = "7.x"

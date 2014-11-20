@@ -1,0 +1,22 @@
+
+#block-views-statistics-block {
+	margin: 24px auto 0;
+	background: #fff;
+	@include border-radius(6px);
+	padding: 12px;
+	@include ems_font_size(13px, $body-font-size);
+	.category-name {
+		float: left;
+		font-weight: bold;
+		width: 85px;
+	}
+	.category-values {
+		float: left;
+		width: 830px;
+		span {
+			padding: 0 12px 0 6px;
+			font-style: italic;
+			font-weight: bold;
+		}
+	}
+}

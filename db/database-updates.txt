@@ -1,0 +1,5 @@
+Database Changes:
+
+1. Flushed Cache
+2. Ensure views and context are purely in code
+

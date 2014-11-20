@@ -1,0 +1,164 @@
+<?php
+// $Id$
+
+/**
+ * @file
+ * Allows enabling automatic addition of nodes to node queues
+ */
+
+/**
+ * Implement hook_permission
+ */
+function auto_nodequeue_permission() {
+  return array(
+    'override auto queue' => array(
+      'title' => t('Override automatically add to queue'),
+    ),
+  );
+}
+
+/**
+ * Adds an additional option to the node queue screen allowing users to set nodes to be added on creation.
+ */
+function auto_nodequeue_form_alter(&$form, &$form_state, $form_id) {
+  if ('nodequeue-edit-queue-form' == $form['#id']) {
+    /**
+     * This is ugly. The nodequeue form doesn't come with field weights, and we don't
+     * want to add them ourselves. This seems safer as we only assume one field's name.
+     */
+    $form_orig = $form;
+    $form = array();
+    foreach ($form_orig as $key => $value) {
+      $form[$key] = $value;
+      if ('types' == $key) {
+        $form['auto_add'] = array(
+          '#type' => 'checkbox',
+          '#title' => t('Auto add nodes'),
+          '#default_value' => _auto_nodequeue_get_queue_flag($form_orig),
+          '#description' => t('Automatically add nodes of the above selected types to this queue.'),
+        );
+      }
+    }
+
+    $form['#submit'][] = 'auto_nodequeue_nodequeue_edit_queue_form_submit';
+  }
+
+  // Only add if this is a NEW node
+  if (isset($form['#node_edit_form']) AND !$form['nid']['#value']) {
+    $form['auto_nodequeue'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Automatic Queue Settings'),
+      '#collapsed' => TRUE,
+      '#collapsible' => TRUE,
+      '#access' => user_access('override auto queue'),
+      '#group' => 'additional_settings',
+    );
+
+    $form['auto_nodequeue']['queues'] = array(
+      '#type' => 'checkboxes',
+      '#title' => t('Available Queues'),
+      '#options' => _auto_nodequeue_get_qids($form['type']['#value']),
+      '#default_value' => _auto_nodequeue_get_auto_qids($form['type']['#value']),
+    );
+  }
+}
+
+/**
+ * Additional submit handler for the nodequeue edit queue form
+ */
+function auto_nodequeue_nodequeue_edit_queue_form_submit($form, &$form_state) {
+  if ($qid = $form_state['values']['qid']) {
+    $auto_add = $form_state['values']['auto_add'];
+    db_merge('nodequeue_auto')
+      ->key(array('qid' => $qid))
+      ->fields(array(
+          'qid' => $qid,
+          'auto_add' => $auto_add,
+      ))
+      ->execute();
+  }
+}
+
+/**
+ * Add nodes to any queue they're assigned to on insertion
+ */
+function auto_nodequeue_node_insert($node) {
+  if (isset($node->queues)) {
+    $qids = array();
+    foreach ($node->queues as $qid => $checked) {
+      if ($qid == $checked) {
+        $qids[] = $qid;
+      }
+    }
+
+    $queues = nodequeue_load_queues($qids);
+    foreach ($queues as $queue) {
+      /**
+       * TODO: This needs rewriting to support any other type of queue. It assumes the "default" behavior, 1 queue/1 subqueue
+       */
+      $subqueues = nodequeue_load_subqueues_by_queue($queue->qid);
+      $subqueue = array_shift($subqueues);
+      nodequeue_subqueue_add($queue, $subqueue, $node->nid);
+    }
+  }
+}
+
+/**
+ * Get the current queue's auto_add flag setting
+ *
+ * @param $form
+ *   The active nodequeue edit form.
+ *
+ * @return
+ *   An integer flag indicating if the current queue has auto node addition enabled
+ */
+function _auto_nodequeue_get_queue_flag($form) {
+  $auto_add = 0;
+  if (isset($form['qid'])) {
+    if ($result = db_query('SELECT auto_add FROM {nodequeue_auto} WHERE qid = :qid', array(':qid' => $form['qid']['#value']))) {
+      $auto_add = $result->fetchField();
+    }
+  }
+
+  return $auto_add;
+}
+
+/**
+ * Fetches a list of qids that are enabled for this node type
+ *
+ * @param string
+ *   The node type
+ * @return
+ *   Associative array of queue id => name
+ */
+function _auto_nodequeue_get_qids($type) {
+  $queues = array();
+  $query = db_select('nodequeue_queue', 'Q');
+  $query->fields('Q', array('qid', 'title'));
+  $query->join('nodequeue_types', 'T', "Q.qid = T.qid AND T.type = :type", array(':type' => $type));
+  $results = $query->execute();
+  foreach ($results as $row) {
+    $queues[$row->qid] = t('Add to queue "%queue"', array('%queue' => $row->title));
+  }
+  return $queues;
+}
+
+/**
+ * Fetches a list of qids that are enabled for automatic addition for this node type
+ *
+ * @param string
+ *   The node type
+ * @return
+ *   An array of queue ids
+ */
+function _auto_nodequeue_get_auto_qids($type) {
+  $qids = array();
+  $query = db_select('nodequeue_auto', 'A');
+  $query->fields('A', array('qid'));
+  $query->join('nodequeue_types', 'T', "A.qid = T.qid AND A.auto_add = 1 AND T.type = :type", array(':type' => $type));
+  $results = $query->execute();
+  foreach ($results as $result) {
+    $qids[] = $result->qid;
+  }
+  return $qids;
+}

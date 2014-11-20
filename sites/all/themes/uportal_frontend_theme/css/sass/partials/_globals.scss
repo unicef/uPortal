@@ -1,0 +1,105 @@
+
+@font-face {
+	font-family: 'uPortalIconFont';
+	src: url('../fonts/uportal-icons-font.eot');
+	src: url('../fonts/uportal-icons-font.eot?#iefix') format('embedded-opentype'),
+	     url('../fonts/uportal-icons-font.woff') format('woff'),
+	     url('../fonts/uportal-icons-font.ttf')  format('truetype'),
+	     url('../fonts/uportal-icons-font.svg#svgFontName') format('svg'); 
+}
+.uportal-icon {
+	font-family: 'uPortalIconFont'; 
+	font-size: 25px; /*Set your own base size*/ 
+	font-weight: normal !important; /* always normal weight */
+	font-style: normal !important; /* never italic */
+	text-decoration: none !important; /*never underlined*/
+	text-rendering: optimizeLegibility;  /* alternatively can be geometricPrecision*/
+	white-space: nowrap; 
+	-webkit-font-smoothing: antialiased; /*alternatively can be subpixel-antialiased*/
+}
+
+
+body {
+	word-wrap: break-word;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin: 0;
+	@include adjust-font-size-to($body-font-size);
+	background: #eaebf0;
+	color: #999;
+	&.front {
+		background: #e5e3da;
+	}
+}
+.element-invisible {
+  position: absolute !important;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+  overflow: hidden;
+  height: 1px;
+}
+h1 {
+	body.no-h1 &,
+	body.listing-page & {
+		@extend .element-invisible;
+	}
+	font-weight: bold;
+	color: #666;
+	@include ems_font_size(24px, $body-font-size);
+	line-height: 1em;
+	padding-bottom: 3px;
+	border-bottom: solid 1px #ccc;
+}
+h2 {
+	color: #666;
+	@include ems_font_size(16px, $body-font-size);
+	font-weight: bold;
+	line-height: 1em;
+}
+.centred-strip {
+	width: 945px;
+	margin: 0 auto;
+}
+.uportal-shadow {
+	background: #fff;
+	@include border-bottom-left-radius(5px);
+	@include border-bottom-right-radius(5px);
+	@include single-box-shadow(#ccc, 0, 0, 3px, 1px, false); //color, hoff, voff, blur, spread, inset
+}
+input, textarea {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+a, li a.active, input {
+	color: #999;
+	text-decoration: none;
+	&.btn {
+		display: block;
+		background: #2c3e50 none;
+		color: #fff;
+		@include ems_font_size(15px, $body-font-size);
+		text-transform: uppercase;
+		line-height: 40px;
+		text-align: center;
+		height: 40px;
+		@include border-radius(4px);
+		border: none;
+		cursor: pointer;
+		@include single-transition(color);
+		@include single-transition(background-color);
+		&:hover, &.active {
+			text-decoration: none;
+			background-color: #3498db;
+			color: #fff;
+		}
+	}
+	&.btn-icon {
+		text-align: left;
+		padding-left: 36px;
+		background-position: 10px center;
+		background-repeat: no-repeat;
+	}
+}
+a:hover {
+	text-decoration: underline;
+}

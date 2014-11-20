@@ -1,0 +1,28 @@
+# Ignore configuration files that may contain sensitive information.
+#sites/*/*settings*.php
+
+# Ignore paths that contain user-generated content.
+#sites/*/files
+#sites/*/private
+
+# Ignore these folder
+#tmp
+komodo
+#sites/ugyouthportal
+#sites/ugyouthportal/old_multisite_files
+
+# Ignore komodo files and folders
+*/.komodotools
+*.komodoproject
+
+# Ignore .sass-cache
+**/.sass-cache
+**/.sass-cache/*
+**sass-cache**
+*/.sass-cache
+.sass-cache
+sites/all/themes/ugyouthportal_theme/css/.sass-cache
+
+# Ignore Netbeans project folder
+nbproject/
+

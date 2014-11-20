@@ -1,0 +1,83 @@
+
+body.management-users-list {
+	h1 {
+		background: url("../../images/h1-users.png") no-repeat 0 15px;
+		padding-left: 40px;
+	}
+	ul.manage-users-list-header {
+		border-left: 1px solid #999;
+		border-right: 1px solid #999;
+		li {
+			&.col-label {
+				background: url("../../images/edit-icons.png") no-repeat 60px -150px;
+				cursor: pointer;
+			}
+			&.name-label {
+				width: 543px;
+			}
+			&.user-status-label {
+				width: 145px;
+			}
+			&.last-access-label {
+				width: 140px;
+				background-position: 95px -150px;
+			}
+		}
+	}
+	ul.manage-users-list {
+		li {
+			border: 1px solid #999;
+			border-top: none;
+			@include ems_font_size(14px, $body-font-size);
+			color: #333;
+		}
+		.float {
+			float: left;
+			height: 40px;
+			line-height: 40px;
+			overflow: hidden;
+			border-right: 1px solid #999;
+			padding: 0 0 0 12px;
+		}
+		.username {
+			width: 543px;
+			a {
+				color: #2d5d84;
+				font-weight: bold;
+				font-size: 110%;
+			}
+			.email {
+				color: #666;
+			}
+		}
+		.user-status {
+			width: 145px;
+		}
+		.last-access {
+			width: 140px;
+			color: #333d44;
+			/*background: #eaf4fb;*/
+		}
+		.user-edit-icons {
+			border-right: none;
+			width: 58px;
+			padding: 10px 0 0 10px;
+			height: auto;
+			a {
+				display: block;
+				float: left;
+				width: 19px;
+				height: 19px;
+				background: url("../../images/edit-icons-manage-categories.png") no-repeat 0 -19px;
+				&.delete-user {
+					margin-left: 10px;
+					background-position: 0 0;
+				}
+				&.disabled {
+					@include opacity(0.7);
+					cursor: default;
+				}
+			}
+		}
+	}
+}

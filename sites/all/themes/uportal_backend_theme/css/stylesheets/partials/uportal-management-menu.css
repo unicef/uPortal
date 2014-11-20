@@ -1,0 +1,172 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline; }
+
+html {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle; }
+
+q, blockquote {
+  quotes: none; }
+  q:before, q:after, blockquote:before, blockquote:after {
+    content: "";
+    content: none; }
+
+a img {
+  border: none; }
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block; }
+
+/*
+@include single-transition(color);
+@include transition(
+	color $default-transition-duration $default-transition-function,
+	background-color $default-transition-duration $default-transition-function,
+	border-color $default-transition-duration $default-transition-function
+);
+*/
+body.management-menu-active {
+  margin-top: 30px !important; }
+
+.header-top-manager-menu {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  z-index: 999;
+  width: 100%; }
+
+#block-uportal-backend-header-manager-menu {
+  height: 30px;
+  line-height: 30px;
+  background: #2c3e50;
+  color: #fff;
+  font-size: 0.8125em; }
+  #block-uportal-backend-header-manager-menu a {
+    color: #fff; }
+    #block-uportal-backend-header-manager-menu a:hover {
+      text-decoration: none; }
+  #block-uportal-backend-header-manager-menu .dashboard-link {
+    float: left;
+    width: 190px;
+    border-left: solid 1px #999;
+    border-right: solid 1px #999; }
+    #block-uportal-backend-header-manager-menu .dashboard-link a {
+      display: block;
+      padding-left: 35px;
+      background: url("../images/header-menu.png") no-repeat 10px 50%; }
+  #block-uportal-backend-header-manager-menu .logo {
+    float: left;
+    width: 70px; }
+    #block-uportal-backend-header-manager-menu .logo a {
+      display: block;
+      height: 30px;
+      background: url("../images/logo.png") no-repeat center center; }
+  #block-uportal-backend-header-manager-menu #user, #block-uportal-backend-header-manager-menu .user, #block-uportal-backend-header-manager-menu .user-menu {
+    float: right; }
+  #block-uportal-backend-header-manager-menu .user {
+    background: url("../images/user-img.png") no-repeat left center;
+    position: relative;
+    height: 30px;
+    padding: 0 10px 0 25px;
+    color: #fff; }
+    #block-uportal-backend-header-manager-menu .user ul {
+      position: absolute;
+      right: 0;
+      top: 30px;
+      background: #2c3e50;
+      display: none; }
+    #block-uportal-backend-header-manager-menu .user:hover ul {
+      display: block; }
+    #block-uportal-backend-header-manager-menu .user a {
+      display: block;
+      white-space: nowrap;
+      padding: 6px 12px;
+      background: #2c3e50;
+      color: #fff;
+      font-size: 12px;
+      -moz-transition: background-color 0.7s ease-out;
+      -o-transition: background-color 0.7s ease-out;
+      -webkit-transition: background-color 0.7s ease-out;
+      transition: background-color 0.7s ease-out;
+      line-height: 1em; }
+      #block-uportal-backend-header-manager-menu .user a:hover {
+        background: #395a7c;
+        text-decoration: none; }
+    #block-uportal-backend-header-manager-menu .user li.user-link a {
+      border-bottom: solid 1px #113152; }
+  #block-uportal-backend-header-manager-menu .quick-links-wrapper {
+    position: relative;
+    float: left;
+    width: 120px; }
+    #block-uportal-backend-header-manager-menu .quick-links-wrapper .links-title {
+      padding-left: 35px;
+      background: url("../images/menu.png") no-repeat 10px 50%; }
+    #block-uportal-backend-header-manager-menu .quick-links-wrapper ul.quick-links-menu {
+      position: absolute;
+      display: none;
+      width: 210px;
+      left: 0;
+      top: 30px;
+      background: #2c3e50; }
+    #block-uportal-backend-header-manager-menu .quick-links-wrapper a {
+      display: block;
+      white-space: nowrap;
+      padding: 6px 12px;
+      background: #2c3e50;
+      color: #fff;
+      font-size: 12px;
+      -moz-transition: background-color 0.7s ease-out;
+      -o-transition: background-color 0.7s ease-out;
+      -webkit-transition: background-color 0.7s ease-out;
+      transition: background-color 0.7s ease-out;
+      border-bottom: solid 1px #999;
+      line-height: 1em; }
+      #block-uportal-backend-header-manager-menu .quick-links-wrapper a:hover {
+        background: #395a7c;
+        text-decoration: none; }
+    #block-uportal-backend-header-manager-menu .quick-links-wrapper:hover ul.quick-links-menu {
+      display: block; }
+  #block-uportal-backend-header-manager-menu .try-new-theme {
+    padding-top: 3px;
+    float: left; }
+    #block-uportal-backend-header-manager-menu .try-new-theme a {
+      border-radius: 3px;
+      background: #b07f17;
+      font-size: 12px;
+      line-height: 1em;
+      padding: 6px;
+      display: block; }
+
+#admin-menu {
+  display: none !important; }
+
+/*# sourceMappingURL=uportal-management-menu.css.map */

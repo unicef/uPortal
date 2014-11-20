@@ -1,0 +1,93 @@
+
+#node-234 {
+	@include border-radius(6px);
+	border-top: solid 6px #3497db;
+	border-bottom: solid 2px #c7c8cd;
+	background: #fff;
+	.link-wrapper {
+		display: none;
+	}
+	.about-col {
+		float: left;
+		width: 313px;
+		a {
+			display: block;
+		}
+	}
+	.about-col-unicef {
+		padding: 20px;
+		width: 273px;
+	}
+	.about-col-team {
+		border-left: solid 1px #ebeaef;
+		border-right: solid 1px #ebeaef;
+		height: 375px;
+		width: 311px;
+	}
+	.about-unicef-creative-commons {
+		background: #3598db;
+		color: #fff;
+		height: 335px;
+		padding-left: 20px;
+		line-height: 1em;
+	}
+	.uportal {
+		font-weight: bold;
+		padding: 90px 0 10px;
+		background: url("../../images/about-page-logo-unicef.png") no-repeat 0 20px;
+		@include ems_font_size(18px, $body-font-size);
+	}
+	.creative-commons {
+		background: url("../../images/about-page-logo-creative-commons.png") no-repeat 0 0;
+		margin-top: 158px;
+		a {
+			height: 28px;
+		}
+	}
+	h2 {
+		line-height: 55px;
+		padding-left: 23px;
+		color: #3398dc;
+		font-weight: bold;
+		@include ems_font_size(16px, $body-font-size);
+		border-bottom: solid 1px #ebeaef;
+	}
+	.team {
+		padding: 20px;
+		@include ems_font_size(14px, $body-font-size);
+		line-height: 1.3em;
+		strong {
+			font-weight: bold;
+		}
+	}
+	.member {
+		padding-bottom: 18px;
+	}
+	.last-member {
+		padding-bottom: 0;
+	}
+	.about-col-partners {
+		.link {
+			margin: 20px 0 0 25px;
+		}
+		.link-dwb {
+			a {
+				height: 53px;
+				background: url("../../images/about-page-logo-dwb.png") no-repeat 0 0;
+			}
+		}
+		.link-design-container {
+			margin: 40px 0 50px 25px;
+			a {
+				height: 59px;
+				background: url("../../images/about-page-logo-dc.png") no-repeat 0 0;
+			}
+		}
+		.link-1010 {
+			a {
+				height: 58px;
+				background: url("../../images/about-page-logo-1010.png") no-repeat 0 0;
+			}
+		}
+	}
+}
